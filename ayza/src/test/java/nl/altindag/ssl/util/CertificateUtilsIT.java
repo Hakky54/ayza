@@ -124,14 +124,14 @@ class CertificateUtilsIT {
                 .withProtocols("TLSv1.2")
                 .build();
 
-        Server server = Server.createDefault(sslFactoryForServerOne);
+        Server server = Server.createDefault(sslFactoryForServerOne, 5002);
 
-        Map<String, List<X509Certificate>> certificatesFromRemote = CertificateUtils.getCertificatesFromExternalSources("https://localhost:8443");
+        Map<String, List<X509Certificate>> certificatesFromRemote = CertificateUtils.getCertificatesFromExternalSources("https://localhost:5002");
 
         server.stop();
 
-        assertThat(certificatesFromRemote).containsKeys("https://localhost:8443");
-        assertThat(certificatesFromRemote.get("https://localhost:8443")).hasSizeGreaterThan(0);
+        assertThat(certificatesFromRemote).containsKeys("https://localhost:5002");
+        assertThat(certificatesFromRemote.get("https://localhost:5002")).hasSizeGreaterThan(0);
     }
 
     @Test
@@ -143,14 +143,14 @@ class CertificateUtilsIT {
                 .withProtocols("TLSv1.2")
                 .build();
 
-        Server server = Server.createDefault(sslFactoryForServerOne);
+        Server server = Server.createDefault(sslFactoryForServerOne, 5001);
 
-        Map<String, List<X509Certificate>> certificatesFromRemote = CertificateUtils.getCertificatesFromExternalSources("https://localhost:8443");
+        Map<String, List<X509Certificate>> certificatesFromRemote = CertificateUtils.getCertificatesFromExternalSources("https://localhost:5001");
 
         server.stop();
 
-        assertThat(certificatesFromRemote).containsKeys("https://localhost:8443");
-        assertThat(certificatesFromRemote.get("https://localhost:8443")).hasSizeGreaterThan(0);
+        assertThat(certificatesFromRemote).containsKeys("https://localhost:5001");
+        assertThat(certificatesFromRemote.get("https://localhost:5001")).hasSizeGreaterThan(0);
     }
 
     @Test
@@ -162,12 +162,12 @@ class CertificateUtilsIT {
                 .withProtocols("TLSv1.2")
                 .build();
 
-        Server server = Server.createDefault(sslFactoryForServerOne);
+        Server server = Server.createDefault(sslFactoryForServerOne, 5000);
 
         CertificateExtractingClient client = CertificateExtractingClient.builder()
                 .build();
 
-        List<X509Certificate> certificates = client.get("https://localhost:8443");
+        List<X509Certificate> certificates = client.get("https://localhost:5000");
 
         server.stop();
 
