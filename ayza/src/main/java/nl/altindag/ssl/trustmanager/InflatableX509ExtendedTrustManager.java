@@ -21,8 +21,8 @@ import nl.altindag.ssl.util.CertificateUtils;
 import nl.altindag.ssl.util.KeyStoreUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
 import nl.altindag.ssl.util.internal.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedTrustManager;
@@ -181,7 +181,7 @@ public class InflatableX509ExtendedTrustManager extends HotSwappableX509Extended
 
                 String alias = generateAlias(certificate);
                 trustStore.setCertificateEntry(alias, certificate);
-                LOGGER.info("Added certificate for [{}]", alias);
+                LOGGER.info(String.format("Added certificate for [%s]", alias));
             }
             X509ExtendedTrustManager trustManager = TrustManagerUtils.createTrustManager(trustStore);
             setTrustManager(trustManager);

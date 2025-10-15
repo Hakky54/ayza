@@ -15,8 +15,8 @@
  */
 package nl.altindag.ssl.keymanager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedKeyManager;
@@ -139,7 +139,7 @@ public class LoggingX509ExtendedKeyManager extends DelegatingX509ExtendedKeyMana
 
     @Override
     public PrivateKey getPrivateKey(String alias) {
-        LOGGER.debug("Attempting to get the private key for the alias: {}", alias);
+        LOGGER.debug(String.format("Attempting to get the private key for the alias: %s", alias));
 
         PrivateKey privateKey = super.getPrivateKey(alias);
         if (privateKey != null) {
@@ -151,7 +151,7 @@ public class LoggingX509ExtendedKeyManager extends DelegatingX509ExtendedKeyMana
 
     @Override
     public X509Certificate[] getCertificateChain(String alias) {
-        LOGGER.debug("Attempting to get the certificate chain for the alias: {}", alias);
+        LOGGER.debug(String.format("Attempting to get the certificate chain for the alias: %s", alias));
 
         X509Certificate[] certificateChain = super.getCertificateChain(alias);
         if (certificateChain != null && certificateChain.length > 0) {

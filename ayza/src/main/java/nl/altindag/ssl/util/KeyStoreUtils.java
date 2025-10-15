@@ -19,8 +19,8 @@ import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.util.internal.CollectorsUtils;
 import nl.altindag.ssl.util.internal.IOUtils;
 import nl.altindag.ssl.util.internal.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
@@ -248,7 +248,7 @@ public final class KeyStoreUtils {
                     .mapToInt(KeyStoreUtils::countAmountOfTrustMaterial)
                     .sum();
 
-            LOGGER.debug("Loaded [{}] system trusted certificates", totalTrustedCertificates);
+            LOGGER.debug(String.format("Loaded [%d] system trusted certificates", totalTrustedCertificates));
         }
 
         return Collections.unmodifiableList(keyStores);

@@ -39,12 +39,12 @@ import nl.altindag.ssl.util.BasicProvider;
 import nl.altindag.ssl.util.KeyManagerUtils;
 import nl.altindag.ssl.util.KeyStoreUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.HostnameVerifier;
@@ -1653,13 +1653,13 @@ class SSLFactoryShould {
 
         int javaMajorVersion = Integer.parseInt(matcher.group(0));
         if (javaMajorVersion < 11) {
-            LOGGER.info("skipping unit test [{}] because TLSv1.3 is not available for this java {} version",
+            LOGGER.info(String.format("skipping unit test [%s] because TLSv1.3 is not available for this java %s version",
                         new Object() {}.getClass().getEnclosingMethod().getName(),
-                        javaVersion);
+                        javaVersion));
             return;
         }
 
-        LOGGER.info("Found java version {}, including testing SSLFactory with TLSv1.3 protocol", javaMajorVersion);
+        LOGGER.info(String.format("Found java version %s, including testing SSLFactory with TLSv1.3 protocol", javaMajorVersion));
         SSLFactory sslFactory = SSLFactory.builder()
                 .withDefaultTrustMaterial()
                 .build();

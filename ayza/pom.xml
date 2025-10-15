@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -12,7 +13,8 @@
     <packaging>jar</packaging>
 
     <name>Ayza Core</name>
-    <description>High level library to configure a SSLContext and other properties to enable SSL/TLS connection</description>
+    <description>High level library to configure a SSLContext and other properties to enable SSL/TLS connection
+    </description>
     <url>https://github.com/Hakky54/ayza</url>
 
     <licenses>
@@ -44,8 +46,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
+            <groupId>io.github.hakky54</groupId>
+            <artifactId>yaslf4j</artifactId>
         </dependency>
 
         <dependency>
@@ -128,5 +130,5 @@
             </plugin>
         </plugins>
     </reporting>
-    
+
 </project>
