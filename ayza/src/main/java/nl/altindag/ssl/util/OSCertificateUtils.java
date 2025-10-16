@@ -16,8 +16,8 @@
 package nl.altindag.ssl.util;
 
 import nl.altindag.ssl.exception.GenericIOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -93,11 +93,11 @@ abstract class OSCertificateUtils {
 
             if (LOGGER.isDebugEnabled()) {
                 int totalTrustedCertificates = countAmountOfTrustMaterial(keyStore);
-                LOGGER.debug("Successfully loaded KeyStore of the type [{}] having [{}] entries", keyStoreType, totalTrustedCertificates);
+                LOGGER.debug(String.format("Successfully loaded KeyStore of the type [%s] having [%d] entries", keyStoreType, totalTrustedCertificates));
             }
             return Optional.of(keyStore);
         } catch (Exception ignored) {
-            LOGGER.debug("Failed to load KeyStore of the type [{}]", keyStoreType);
+            LOGGER.debug(String.format("Failed to load KeyStore of the type [%s]", keyStoreType));
             return Optional.empty();
         }
     }

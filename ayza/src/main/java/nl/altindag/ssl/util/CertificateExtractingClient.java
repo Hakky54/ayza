@@ -18,8 +18,8 @@ package nl.altindag.ssl.util;
 import nl.altindag.ssl.SSLFactory;
 import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.model.ClientConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;
@@ -134,7 +134,7 @@ public class CertificateExtractingClient {
                     .collect(toUnmodifiableList());
         } catch (IOException exception) {
             if (exception instanceof SocketTimeoutException || exception.getCause() instanceof SocketTimeoutException) {
-                LOGGER.debug("The client didn't get a respond within the configured time-out of [{}] milliseconds from: [{}]", timeout.toMillis(), url);
+                LOGGER.debug(String.format("The client didn't get a respond within the configured time-out of [%d] milliseconds from: [%s]", timeout.toMillis(), url));
                 return Collections.emptyList();
             }
             throw new GenericIOException(String.format("Failed getting certificate from: [%s]", url), exception);
@@ -205,7 +205,7 @@ public class CertificateExtractingClient {
                         .collect(toUnmodifiableList());
             }
         } catch (Exception e) {
-            LOGGER.debug("Skipped getting certificate from remote file while using the following location [{}]", issuerLocation, e);
+            LOGGER.debug(String.format("Skipped getting certificate from remote file while using the following location [%s]", issuerLocation), e);
             return Collections.emptyList();
         } finally {
             SSLSessionUtils.invalidateCaches(unsafeSslFactory);

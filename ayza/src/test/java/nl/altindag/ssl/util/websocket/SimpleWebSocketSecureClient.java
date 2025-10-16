@@ -15,10 +15,10 @@
  */
 package nl.altindag.ssl.util.websocket;
 
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 
@@ -37,7 +37,7 @@ public class SimpleWebSocketSecureClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        LOGGER.debug("got: {}", message);
+        LOGGER.debug(String.format("got: %s", message));
     }
 
     @Override

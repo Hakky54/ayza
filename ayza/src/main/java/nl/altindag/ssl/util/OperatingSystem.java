@@ -15,8 +15,8 @@
  */
 package nl.altindag.ssl.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nl.altindag.yaslf4j.Logger;
+import nl.altindag.yaslf4j.LoggerFactory;
 
 import java.security.KeyStore;
 import java.util.Collections;
@@ -79,7 +79,7 @@ enum OperatingSystem {
                 .map(OSCertificateUtils::getTrustStores)
                 .orElseGet(() -> {
                     String resolvedOsName = getResolvedOsName();
-                    LOGGER.warn("No system KeyStores available for [{}]", resolvedOsName);
+                    LOGGER.warn(String.format("No system KeyStores available for [%s]", resolvedOsName));
                     return Collections.emptyList();
                 });
     }
