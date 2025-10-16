@@ -54,7 +54,7 @@
     </developers>
 
     <properties>
-        <version.yaslf4j>1.0.5</version.yaslf4j>
+        <version.yaslf4j>1.0.6</version.yaslf4j>
         <version.slf4j>2.0.17</version.slf4j>
         <version.junit>5.14.0</version.junit>
         <version.assertj-core>3.27.6</version.assertj-core>
