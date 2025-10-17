@@ -15,8 +15,8 @@
  */
 package nl.altindag.ssl.util.websocket;
 
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 

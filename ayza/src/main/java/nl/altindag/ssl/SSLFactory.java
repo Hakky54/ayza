@@ -35,8 +35,8 @@ import nl.altindag.ssl.util.SSLSessionUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
 import nl.altindag.ssl.util.internal.StringUtils;
 import nl.altindag.ssl.util.internal.UriUtils;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.HostnameVerifier;

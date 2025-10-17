@@ -31,8 +31,8 @@ import nl.altindag.ssl.trustmanager.TrustManagerFactoryWrapper;
 import nl.altindag.ssl.trustmanager.UnsafeX509ExtendedTrustManager;
 import nl.altindag.ssl.trustmanager.X509TrustManagerWrapper;
 import nl.altindag.ssl.util.internal.CollectorsUtils;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;

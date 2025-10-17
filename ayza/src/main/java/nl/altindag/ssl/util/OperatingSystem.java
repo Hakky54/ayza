@@ -15,8 +15,8 @@
  */
 package nl.altindag.ssl.util;
 
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import java.security.KeyStore;
 import java.util.Collections;

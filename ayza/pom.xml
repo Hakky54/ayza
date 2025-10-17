@@ -42,12 +42,13 @@
         <version.maven-project-info-reports-plugin>3.9.0</version.maven-project-info-reports-plugin>
         <version.maven-surefire-report-plugin>3.5.4</version.maven-surefire-report-plugin>
         <version.maven-jxr-plugin>3.6.0</version.maven-jxr-plugin>
+        <version.logback>1.5.19</version.logback>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>io.github.hakky54</groupId>
-            <artifactId>yaslf4j</artifactId>
+            <artifactId>sude</artifactId>
         </dependency>
 
         <dependency>
@@ -78,6 +79,12 @@
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
             <version>${version.java-websockets}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${version.logback}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

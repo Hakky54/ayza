@@ -21,8 +21,8 @@ import nl.altindag.ssl.util.CertificateUtils;
 import nl.altindag.ssl.util.KeyStoreUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
 import nl.altindag.ssl.util.internal.StringUtils;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedTrustManager;

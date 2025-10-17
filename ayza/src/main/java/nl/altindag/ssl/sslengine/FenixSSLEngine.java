@@ -16,8 +16,8 @@
 package nl.altindag.ssl.sslengine;
 
 import nl.altindag.ssl.util.internal.Callable;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;

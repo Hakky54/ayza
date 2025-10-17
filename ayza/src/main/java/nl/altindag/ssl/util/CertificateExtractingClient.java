@@ -18,8 +18,8 @@ package nl.altindag.ssl.util;
 import nl.altindag.ssl.SSLFactory;
 import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.model.ClientConfig;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSocketFactory;

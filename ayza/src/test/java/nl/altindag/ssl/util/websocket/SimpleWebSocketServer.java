@@ -18,8 +18,8 @@ package nl.altindag.ssl.util.websocket;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;

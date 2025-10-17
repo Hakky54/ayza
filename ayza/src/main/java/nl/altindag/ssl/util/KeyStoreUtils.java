@@ -19,8 +19,8 @@ import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.util.internal.CollectorsUtils;
 import nl.altindag.ssl.util.internal.IOUtils;
 import nl.altindag.ssl.util.internal.StringUtils;
-import nl.altindag.yaslf4j.Logger;
-import nl.altindag.yaslf4j.LoggerFactory;
+import nl.altindag.sude.Logger;
+import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
