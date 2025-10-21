@@ -3,6 +3,10 @@
 This list is not intended to be all-encompassing - it will document major and breaking API
 changes with their rationale when appropriate:
 
+### v10.0.1
+- Made SLF4J an optional, removed as transitive dependency
+- Added [Sude](https://github.com/Hakky54/sude) logging api to conditionally log ayza-logs to slf4j or log4j2. If any of these logging api's are present on the classpath or else it will use java util logging.
+- Bumped dependencies
 ### v10.0.0
 - renamed project from sslcontext-kickstart to ayza. Detailed explanation can be found in the README file
 ### v9.2.1
