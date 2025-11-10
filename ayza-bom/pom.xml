@@ -41,7 +41,7 @@
     <properties>
         <version.maven-compiler-plugin>3.14.1</version.maven-compiler-plugin>
         <version.maven-gpg-plugin>3.2.8</version.maven-gpg-plugin>
-        <version.maven-release-plugin>3.1.1</version.maven-release-plugin>
+        <version.maven-release-plugin>3.2.0</version.maven-release-plugin>
         <version.nexus-staging-maven-plugin>1.7.0</version.nexus-staging-maven-plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
