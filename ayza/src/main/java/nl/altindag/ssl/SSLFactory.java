@@ -779,6 +779,7 @@ public final class SSLFactory {
 
         public Builder withUnsafeHostnameVerifier() {
             this.hostnameVerifier = HostnameVerifierUtils.createUnsafe();
+            System.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
             return this;
         }
 
