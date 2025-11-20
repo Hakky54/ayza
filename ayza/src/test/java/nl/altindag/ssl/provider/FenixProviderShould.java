@@ -52,6 +52,7 @@ class FenixProviderShould {
                 new SimpleEntry<>("Alg.Alias.SSLContext.TLSv1.1", "TLS"),
                 new SimpleEntry<>("Alg.Alias.SSLContext.TLSv1.2", "TLS"),
                 new SimpleEntry<>("Alg.Alias.SSLContext.TLSv1.3", "TLS"),
+                new SimpleEntry<>("Alg.Alias.SSLContext.Default", "TLS"),
                 new SimpleEntry<>("Provider.id className", "nl.altindag.ssl.provider.FenixProvider"),
                 new SimpleEntry<>("Provider.id info", "Fenix Security Provider"),
                 new SimpleEntry<>("Provider.id name", "Fenix"),
@@ -76,7 +77,7 @@ class FenixProviderShould {
             FenixProvider provider = new FenixProvider();
             Security.insertProviderAt(provider, 1);
 
-            for (String protocol : Arrays.asList("SSL", "SSLv2", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3", "TLS")) {
+            for (String protocol : Arrays.asList("Default", "SSL", "SSLv2", "SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3", "TLS")) {
                 SSLContext sslContext = SSLContext.getInstance(protocol);
                 assertThat(sslContext.getProvider()).isEqualTo(provider);
                 assertThat(sslContext.getSocketFactory()).isInstanceOf(FenixSSLSocketFactory.class);

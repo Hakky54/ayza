@@ -39,6 +39,7 @@ public final class FenixProvider extends Provider {
         put("Alg.Alias.SSLContext.TLSv1.1", "TLS");
         put("Alg.Alias.SSLContext.TLSv1.2", "TLS");
         put("Alg.Alias.SSLContext.TLSv1.3", "TLS");
+        put("Alg.Alias.SSLContext.Default", "TLS");
     }
 
 }
