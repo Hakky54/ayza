@@ -345,6 +345,7 @@ SSLFactory sslFactory = SSLFactory.builder()
           .build();
 
 HttpsURLConnection.setDefaultHostnameVerifier(sslFactory.getHostnameVerifier());
+System.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
 ```
 
 ##### Loading JDK and OS trusted certificates
