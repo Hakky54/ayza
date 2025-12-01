@@ -10,6 +10,7 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.hakky54/ayza/badge.svg)](https://mvnrepository.com/artifact/io.github.hakky54/ayza)
 [![Dependencies: none](https://img.shields.io/badge/dependencies-1-blue.svg)](#)
 [![GitHub stars chart](https://img.shields.io/badge/github%20stars-chart-blue.svg)](https://seladb.github.io/StarTrack-js/#/preload?r=hakky54,ayza)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FHakky54%2Fayza.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FHakky54%2Fayza?ref=badge_shield)
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=io.github.hakky54%3Aayza-parent)
 
@@ -111,6 +112,7 @@ libraryDependencies += "io.github.hakky54" % "ayza" % "10.0.2"
 4. [Tested HTTP Clients](#tested-http-clients)
 5. [Contributing](#contributing)
 6. [Contributors](#contributors-)   
+7. [License](#license)
 
 ## Introduction
 Ayza is a library which provides a High-Level SSLFactory class for configuring a http client or a server to communicate over SSL/TLS for one way authentication or two-way authentication.
@@ -1471,3 +1473,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FHakky54%2Fayza.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FHakky54%2Fayza?ref=badge_large)
