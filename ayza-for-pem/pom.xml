@@ -36,7 +36,7 @@
     </developers>
 
     <properties>
-        <version.bouncy-castle>1.82</version.bouncy-castle>
+        <version.bouncy-castle>1.83</version.bouncy-castle>
     </properties>
 
     <dependencies>
