@@ -15,12 +15,12 @@
  */
 package nl.altindag.ssl.sslengine;
 
-import nl.altindag.ssl.util.internal.Callable;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLParameters;
+import java.util.function.Supplier;
 
 /**
  * <strong>NOTE:</strong>
@@ -89,9 +89,9 @@ public class FenixSSLEngine extends DelegatingSSLEngine {
         return updateAndGet(super::getSSLParameters);
     }
 
-    private <T> T updateAndGet(Callable<T> callable) {
+    private <T> T updateAndGet(Supplier<T> supplier) {
         sslEngine.setSSLParameters(sslParameters);
-        return callable.call();
+        return supplier.get();
     }
 
 }
