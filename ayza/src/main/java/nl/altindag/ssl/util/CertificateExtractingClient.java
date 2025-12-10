@@ -38,11 +38,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SignatureException;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,7 +61,9 @@ public class CertificateExtractingClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CertificateExtractingClient.class);
     private static final Pattern CA_ISSUERS_AUTHORITY_INFO_ACCESS = Pattern.compile("(?s)^AuthorityInfoAccess\\h+\\[\\R\\s*\\[\\R.*?accessMethod:\\h+caIssuers\\R\\h*accessLocation: URIName:\\h+(https?://\\S+)", Pattern.MULTILINE);
+    private static final Integer DNS_NAME_ID = 2;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(1);
+    private static final String ASTERISKS_AND_DOT = "\\*\\.";
 
     private static CertificateExtractingClient instance;
 
@@ -128,7 +134,7 @@ public class CertificateExtractingClient {
                 return Collections.emptyList();
             }
 
-            List<X509Certificate> resolvedRootCa = shouldResolveRootCa? getRootCaFromChainIfPossible(certificatesCollector) : Collections.emptyList();
+            List<X509Certificate> resolvedRootCa = shouldResolveRootCa ? getRootCaFromChainIfPossible(certificatesCollector) : Collections.emptyList();
             return Stream.of(certificatesCollector, resolvedRootCa)
                     .flatMap(Collection::stream)
                     .collect(toUnmodifiableList());
@@ -197,7 +203,7 @@ public class CertificateExtractingClient {
                 ((HttpsURLConnection) connection).setSSLSocketFactory(unsafeSslSocketFactory);
             }
 
-            try(InputStream inputStream = connection.getInputStream()) {
+            try (InputStream inputStream = connection.getInputStream()) {
                 return CertificateUtils.parseDerCertificate(inputStream).stream()
                         .filter(X509Certificate.class::isInstance)
                         .map(X509Certificate.class::cast)
@@ -227,6 +233,48 @@ public class CertificateExtractingClient {
         } catch (CertificateException | NoSuchAlgorithmException | InvalidKeyException | NoSuchProviderException | SignatureException e) {
             return false;
         }
+    }
+
+    /**
+     * Extracts certificates based on a list of DNS Names from the Subject Alternative Name extension.
+     */
+    public Map<String, List<X509Certificate>> getSiblings(List<X509Certificate> certificates) {
+        Map<String, List<X509Certificate>> siblings = new HashMap<>();
+
+        List<String> dnsNames = getDnsNames(certificates);
+        for (String dnsName : dnsNames) {
+            try {
+                List<X509Certificate> siblingCertificate = get(dnsName);
+                siblings.put(dnsName, siblingCertificate);
+            } catch (Exception ignored) {}
+        }
+
+        return Collections.unmodifiableMap(siblings);
+    }
+
+    /**
+     * Extracts the DNS Names from the Subject Alternative Name extension of the provided certificates.
+     * And appends "https://" prefix to each DNS name.
+     */
+    private List<String> getDnsNames(List<X509Certificate> certificates) {
+        List<String> dnsNames = new ArrayList<>();
+        for (X509Certificate certificate : certificates) {
+            try {
+                if (certificate.getSubjectAlternativeNames() == null) {
+                    continue;
+                }
+
+                certificate.getSubjectAlternativeNames().stream()
+                        .filter(sanEntry -> sanEntry.size() == 2)
+                        .filter(sanEntry -> DNS_NAME_ID.equals(sanEntry.get(0)))
+                        .map(sanEntry -> sanEntry.get(1))
+                        .map(dnsName -> ((String) dnsName).replaceFirst(ASTERISKS_AND_DOT, ""))
+                        .map(dnsName -> "https://" + dnsName)
+                        .forEach(dnsNames::add);
+
+            } catch (CertificateParsingException ignored) {}
+        }
+        return Collections.unmodifiableList(dnsNames);
     }
 
     List<X509Certificate> getCertificatesCollector() {
