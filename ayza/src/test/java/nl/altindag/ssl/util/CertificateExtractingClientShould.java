@@ -46,6 +46,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -240,5 +241,13 @@ class CertificateExtractingClientShould {
             assertThat(pa).hasSameClassAs(passwordAuthentication);
         }
     }
+
+    @Test
+    void extractSiblingCertificates() {
+        List<X509Certificate> certificates = CertificateExtractingClient.getInstance().get("https://www.facebook.com/");
+        Map<String, List<X509Certificate>> siblingCertificates = CertificateExtractingClient.getInstance().getSiblings(certificates);
+        assertThat(siblingCertificates).isNotEmpty();
+    }
+
 
 }
