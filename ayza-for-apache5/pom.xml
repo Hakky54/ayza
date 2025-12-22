@@ -36,7 +36,7 @@
     </developers>
 
     <properties>
-        <version.httpcomponents.httpclient5>5.5.1</version.httpcomponents.httpclient5>
+        <version.httpcomponents.httpclient5>5.6</version.httpcomponents.httpclient5>
     </properties>
 
     <dependencies>
