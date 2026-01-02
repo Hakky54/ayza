@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.github.hakky54</groupId>
         <artifactId>ayza-bom</artifactId>
-        <version>10.0.3</version>
+        <version>10.0.4-SNAPSHOT</version>
         <relativePath>./ayza-bom</relativePath>
     </parent>
 
@@ -38,7 +38,7 @@
         <url>https://github.com/Hakky54/ayza</url>
         <connection>scm:git:git@github.com:Hakky54/ayza.git</connection>
         <developerConnection>scm:git:git@github.com:Hakky54/ayza.git</developerConnection>
-        <tag>v10.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
