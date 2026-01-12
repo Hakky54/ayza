@@ -56,7 +56,7 @@
     <properties>
         <version.sude>2.0.2</version.sude>
         <version.slf4j>2.0.17</version.slf4j>
-        <version.junit>5.14.1</version.junit>
+        <version.junit>5.14.2</version.junit>
         <version.assertj-core>3.27.6</version.assertj-core>
         <version.logcaptor>2.12.1</version.logcaptor>
         <version.mockito>5.20.0</version.mockito>
