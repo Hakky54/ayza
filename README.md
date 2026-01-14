@@ -110,9 +110,10 @@ libraryDependencies += "io.github.hakky54" % "ayza" % "10.0.3"
      - [Apache 4](#apache-4)
      - [Apache 5](#apache-5)
 4. [Tested HTTP Clients](#tested-http-clients)
-5. [Contributing](#contributing)
-6. [Contributors](#contributors-)   
-7. [License](#license)
+5. [Tested HTTP Servers](#tested-http-servers)
+6. [Contributing](#contributing)
+7. [Contributors](#contributors-)   
+8. [License](#license)
 
 ## Introduction
 Ayza is a library which provides a High-Level SSLFactory class for configuring a http client or a server to communicate over SSL/TLS for one way authentication or two-way authentication.
@@ -1408,6 +1409,17 @@ There is a github project available named [Mutual-tls-ssl](https://github.com/Ha
 * Two way authentication with trusting the Certificate Authority
 
 It will also explain how to create KeyStores, Certificates, Certificate Signing Requests and how to implement it.
+
+## Tested HTTP Servers
+Below is a list of servers which have already been tested with examples configuration
+
+- [Spring Boot and Jetty](https://github.com/Hakky54/java-tutorials/tree/main/instant-server-ssl-reloading)
+- [Spring Boot and Tomcat](https://github.com/Hakky54/java-tutorials/tree/main/instant-ssl-reloading-with-spring-tomcat)
+- [Spring Boot gRPC](https://github.com/Hakky54/java-tutorials/tree/main/instant-ssl-reloading-with-spring-grpc)
+- [Vert.x](https://github.com/Hakky54/java-tutorials/tree/main/instant-server-ssl-reloading-with-vertx/vertx-server)
+- [Netty](https://github.com/Hakky54/java-tutorials/tree/main/instant-server-ssl-reloading-with-netty/netty-server)
+- [gRPC](https://github.com/Hakky54/java-tutorials/tree/main/grpc-client-server-with-ssl/instant-server-ssl-reloading-with-grpc)
+- [Quarkus](https://github.com/Hakky54/java-tutorials/tree/main/instant-server-ssl-reloading-with-quarkus)
 
 ## Contributing
 
