@@ -577,14 +577,12 @@ server: [GitHub - Instant SSL Reloading](https://github.com/Hakky54/java-tutoria
 
 ##### Trust additional new certificates at runtime
 
-Although it is possible to reload the complete trust material as shown before
-in [Reloading SSL at runtime](#support-for-reloading-ssl-at-runtime)
+Although it is possible to reload the complete trust material as shown before in [Reloading SSL at runtime](#support-for-reloading-ssl-at-runtime)
 and [Hot swap KeyManager and TrustManager at runtime](#support-for-swapping-keymanager-and-trustmanager-at-runtime), in
 some occasions you might want the trust additional new certificates without reloading all the trust material as it
 might be redundant. Especially if you want to keep other trust material intact which is already loaded to your
 SSLFactory and you don't want it to be reloaded. An example use case would be using the JDK and OS trusted Certificates
-Authorities
-and your custom truststore which can grow over time. See below for two examples:
+Authorities and your custom truststore which can grow over time. See below for two examples:
 
 ##### Option 1
 
@@ -618,6 +616,9 @@ SSLFactory sslFactory = SSLFactory.builder()
 ```
 
 A proof-of-concept is available here: [GitHub - Trust Me](https://github.com/Hakky54/trust-me) which demonstrates how it can be integrated in a GUI and prompting the end-user to either trust or reject the server certificate. It will be applied instantly and the ssl configuration will be reloaded.
+
+##### Demo
+![alt text](https://github.com/Hakky54/java-tutorials/blob/main/trust-me/images/demo.gif?raw=true)
 
 ##### Routing identity material to specific host
 
