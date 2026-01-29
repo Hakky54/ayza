@@ -610,7 +610,7 @@ SSLFactory sslFactory = SSLFactory.builder()
         .withSystemTrustMaterial()
         .withInflatableTrustMaterial(Paths.get("/path/to/truststore.p12"), "password".toCharArray(), "PKCS12", trustManagerParameters -> {
             // do some validation to decide whether to trust this certificate
-            return true;
+            return true; // or false if it should not be trusted
         })
         .build();
 ```
