@@ -763,6 +763,9 @@ certificates = CertificateUtils.getCertificatesFromExternalSource(proxy, passwor
 
 See here also for a demo application for the CLI: [GitHub - Certificate Ripper](https://github.com/Hakky54/certificate-ripper)
 
+###### Demo
+![alt text](https://github.com/Hakky54/certificate-ripper/blob/master/images/demo.gif?raw=true)
+
 #### Using P7B or PKCS#7 Files
 Support for using p7b formatted certificates and certificate-chain from classpath, any directory or as an InputStream. 
 P7b file is a text file containing a `-----BEGIN PKCS7-----` as header, `-----END PKCS7-----` as footer and has a Base64 encoded data between it.
