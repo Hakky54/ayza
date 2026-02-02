@@ -39,7 +39,7 @@
     </developers>
 
     <properties>
-        <version.maven-compiler-plugin>3.14.1</version.maven-compiler-plugin>
+        <version.maven-compiler-plugin>3.15.0</version.maven-compiler-plugin>
         <version.maven-gpg-plugin>3.2.8</version.maven-gpg-plugin>
         <version.maven-release-plugin>3.3.1</version.maven-release-plugin>
         <version.nexus-staging-maven-plugin>1.7.0</version.nexus-staging-maven-plugin>
