@@ -71,6 +71,7 @@
         <version.license-maven-plugin>5.0.0</version.license-maven-plugin>
         <version.maven-surefire-junit5-tree-reporter>1.5.1</version.maven-surefire-junit5-tree-reporter>
         <license.git.copyrightYears>2019</license.git.copyrightYears>
+        <skipTests>false</skipTests>
     </properties>
 
     <dependencyManagement>
@@ -221,6 +222,7 @@
                     </consoleOutputReporter>
                     <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
                     </statelessTestsetInfoReporter>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
 
@@ -243,6 +245,7 @@
                     </consoleOutputReporter>
                     <statelessTestsetInfoReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5StatelessTestsetInfoTreeReporter">
                     </statelessTestsetInfoReporter>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
                 <executions>
                     <execution>
