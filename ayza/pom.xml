@@ -39,7 +39,7 @@
     <properties>
         <version.java-websockets>1.6.0</version.java-websockets>
         <version.maven-project-info-reports-plugin>3.9.0</version.maven-project-info-reports-plugin>
-        <version.maven-surefire-report-plugin>3.5.4</version.maven-surefire-report-plugin>
+        <version.maven-surefire-report-plugin>3.5.5</version.maven-surefire-report-plugin>
         <version.maven-jxr-plugin>3.6.0</version.maven-jxr-plugin>
     </properties>
 
