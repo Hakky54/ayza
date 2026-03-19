@@ -17,11 +17,16 @@ package nl.altindag.ssl.trustmanager;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedTrustManager;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * <strong>NOTE:</strong>
@@ -31,46 +36,54 @@ import java.util.List;
  */
 public class CertificateCapturingX509ExtendedTrustManager extends DelegatingX509ExtendedTrustManager {
 
-    private final List<X509Certificate> certificatesCollector;
+    private static final Function<X509Certificate[], List<X509Certificate>> COLLECTION_MAPPER = chain -> new ArrayList<>(Arrays.asList(chain));
+    private static final BiFunction<List<X509Certificate>, X509Certificate[], List<X509Certificate>> COLLECTION_MERGER = (list, array) -> {
+        List<X509Certificate> result = new ArrayList<>(list);
+        result.addAll(list);
+        result.addAll(Arrays.asList(array));
+        return result;
+    };
 
-    public CertificateCapturingX509ExtendedTrustManager(X509ExtendedTrustManager trustManager, List<X509Certificate> certificatesCollector) {
+    private final Map<String, List<X509Certificate>> certificatesCollector;
+
+    public CertificateCapturingX509ExtendedTrustManager(X509ExtendedTrustManager trustManager, Map<String, List<X509Certificate>> certificatesCollector) {
         super(trustManager);
         this.certificatesCollector = certificatesCollector;
     }
 
     @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.compute("no-host", (k, v) -> v == null ? COLLECTION_MAPPER.apply(chain) : COLLECTION_MERGER.apply(v, chain));
         super.checkClientTrusted(chain, authType);
     }
 
     @Override
     public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.compute("no-host", (k, v) -> v == null ? COLLECTION_MAPPER.apply(chain) : COLLECTION_MERGER.apply(v, chain));
         super.checkServerTrusted(chain, authType);
     }
 
     @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.put(((InetSocketAddress) socket.getRemoteSocketAddress()).getHostName(), COLLECTION_MAPPER.apply(chain));
         super.checkClientTrusted(chain, authType, socket);
     }
 
     @Override
     public void checkClientTrusted(X509Certificate[] chain, String authType, SSLEngine sslEngine) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.put(sslEngine.getPeerHost(), COLLECTION_MAPPER.apply(chain));
         super.checkClientTrusted(chain, authType, sslEngine);
     }
 
     @Override
     public void checkServerTrusted(X509Certificate[] chain, String authType, Socket socket) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.put(((InetSocketAddress) socket.getRemoteSocketAddress()).getHostName(), COLLECTION_MAPPER.apply(chain));
         super.checkServerTrusted(chain, authType, socket);
     }
 
     @Override
     public void checkServerTrusted(X509Certificate[] chain, String authType, SSLEngine sslEngine) throws CertificateException {
-        certificatesCollector.addAll(Arrays.asList(chain));
+        certificatesCollector.put(sslEngine.getPeerHost(), COLLECTION_MAPPER.apply(chain));
         super.checkServerTrusted(chain, authType, sslEngine);
     }
 

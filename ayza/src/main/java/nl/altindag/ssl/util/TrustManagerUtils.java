@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -205,11 +206,11 @@ public final class TrustManagerUtils {
         return new LoggingX509ExtendedTrustManager(wrapIfNeeded(baseTrustManager));
     }
 
-    public static X509ExtendedTrustManager createCertificateCapturingTrustManager(List<X509Certificate> certificatesCollector) {
+    public static X509ExtendedTrustManager createCertificateCapturingTrustManager(Map<String, List<X509Certificate>> certificatesCollector) {
         return createCertificateCapturingTrustManager(TrustManagerUtils.createUnsafeTrustManager(), certificatesCollector);
     }
 
-    public static X509ExtendedTrustManager createCertificateCapturingTrustManager(X509TrustManager baseTrustManager, List<X509Certificate> certificatesCollector) {
+    public static X509ExtendedTrustManager createCertificateCapturingTrustManager(X509TrustManager baseTrustManager, Map<String, List<X509Certificate>> certificatesCollector) {
         return new CertificateCapturingX509ExtendedTrustManager(wrapIfNeeded(baseTrustManager), certificatesCollector);
     }
 
