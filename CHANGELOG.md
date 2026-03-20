@@ -4,7 +4,7 @@ This list is not intended to be all-encompassing - it will document major and br
 changes with their rationale when appropriate:
 
 ### v10.0.4
-- Improved performance of extracting service certificates
+- Improved performance of extracting server certificates
 - Bumped dependencies
 ### v10.0.3
 - Removed option to disable HostnameVerifier for Java Net Http Client
