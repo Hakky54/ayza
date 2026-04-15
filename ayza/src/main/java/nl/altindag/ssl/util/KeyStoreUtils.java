@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -84,7 +83,7 @@ public final class KeyStoreUtils {
     }
 
     private static KeyStore loadKeyStore(String keystorePath, KeyStoreFunction<InputStream, KeyStore> keyStoreKeyStoreFunction) {
-        try (InputStream keystoreInputStream = KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystorePath)) {
+        try (InputStream keystoreInputStream = IOUtils.getResourceAsStream(keystorePath)) {
             requireNotNull(keystoreInputStream, KEYSTORE_NOT_FOUND_EXCEPTION_MESSAGE.apply(keystorePath));
             return keyStoreKeyStoreFunction.apply(keystoreInputStream);
         } catch (Exception e) {
@@ -109,7 +108,7 @@ public final class KeyStoreUtils {
     }
 
     private static KeyStore loadKeyStore(Path keystorePath, KeyStoreFunction<InputStream, KeyStore> mapper) {
-        try (InputStream keystoreInputStream = Files.newInputStream(keystorePath, StandardOpenOption.READ)) {
+        try (InputStream keystoreInputStream = IOUtils.getFileAsStream(keystorePath)) {
             return mapper.apply(keystoreInputStream);
         } catch (Exception e) {
             throw new GenericKeyStoreException(e);

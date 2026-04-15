@@ -136,7 +136,7 @@ public final class CertificateUtils {
     public static List<Certificate> loadCertificate(String... certificatePaths) {
         return loadCertificate(certificatePath ->
                 requireNotNull(
-                        CertificateUtils.class.getClassLoader().getResourceAsStream(certificatePath),
+                        IOUtils.getResourceAsStream(certificatePath),
                         CERTIFICATE_NOT_FOUND_EXCEPTION_MESSAGE.apply(certificatePath)),
                 certificatePaths
         );
