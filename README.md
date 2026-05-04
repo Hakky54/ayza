@@ -109,7 +109,7 @@ libraryDependencies += "io.github.hakky54" % "ayza" % "10.0.4"
      - [Apache 5](#apache-5)
 4. [Tested HTTP Clients](#tested-http-clients)
 5. [Tested HTTP Servers](#tested-http-servers)
-6. [Contributing](#contributing)
+6. [Support](#support)
 7. [Contributors](#contributors-)   
 8. [License](#license)
 
