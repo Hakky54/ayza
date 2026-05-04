@@ -16,8 +16,6 @@
 
 # Ayza 🔐
 
-Ayza is a library which provides various utilities to easily configure SSL/TLS for your Http Client and Server. It takes away the verbosity and provides powerful features such as hot reloading of ssl material for rotating certificates without downtime, support for multiple identity and trust materials, support for encrypted pem files, trusting additional certificates at runtime or easily bypassing ssl configuration of other libraries and much more. Please check out the [Table of contents](#table-of-contents) to discover all the possibilities which Ayza can offer. 
-
 # Install library with:
 ### Install with [Maven](https://mvnrepository.com/artifact/io.github.hakky54/ayza)
 ```xml
@@ -114,8 +112,7 @@ libraryDependencies += "io.github.hakky54" % "ayza" % "10.0.4"
 8. [License](#license)
 
 ## Introduction
-Ayza is a library which provides a High-Level SSLFactory class for configuring a http client or a server to communicate over SSL/TLS for one way authentication or two-way authentication.
-It is designed to be as lightweight as possible by having minimized the external dependencies. The core library only depends on the SLF4J logging API.
+Ayza is a library which provides various utilities to easily configure SSL/TLS for your Http Client and Server. It takes away the verbosity and provides powerful features such as hot reloading of ssl material for rotating certificates without downtime, support for multiple identity and trust materials, support for encrypted pem files, trusting additional certificates at runtime or easily bypassing ssl configuration of other libraries and much more. Please check out the [Table of contents](#table-of-contents) to discover all the possibilities which Ayza can offer.
 
 ### History
 As a Java developer I worked for different kinds of clients. Most of the time the application required to call other microservices within the organization or some other http servers. 
