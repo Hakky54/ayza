@@ -15,10 +15,8 @@
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=io.github.hakky54%3Aayza-parent)
 
 # Ayza 🔐
-Hey, hello there 👋 Welcome, I hope you will like this library. Feel free to drop a message in the [📖 Guestbook](https://github.com/Hakky54/ayza/discussions/302), I would love to hear your story and experience in using this library.
 
-I have created this library with ❤️ and passion, mostly during evening and night hours. If you use my library and want to appreciate the work I have done, please consider to sponsor this project as a way to contribute back to the community.
-There are 3 options available to pick from: [GitHub](https://github.com/sponsors/Hakky54), [Ko-fi](https://ko-fi.com/hakky54) and [Open Collective](https://opencollective.com/hakky54)
+Ayza is a library which provides various utilities to easily configure SSL/TLS for your Http Client and Server. It takes away the verbosity and provides powerful features such as hot reloading of ssl material for rotating certificates without downtime, support for multiple identity and trust materials, support for encrypted pem files, trusting additional certificates at runtime or easily bypassing ssl configuration of other libraries and much more. Please check out the [Table of contents](#table-of-contents) to discover all the possibilities which Ayza can offer. 
 
 # Install library with:
 ### Install with [Maven](https://mvnrepository.com/artifact/io.github.hakky54/ayza)
@@ -1437,14 +1435,15 @@ Below is a list of servers which have already been tested with examples configur
 - [gRPC](https://github.com/Hakky54/java-tutorials/tree/main/grpc-client-server-with-ssl/instant-server-ssl-reloading-with-grpc)
 - [Quarkus](https://github.com/Hakky54/java-tutorials/tree/main/instant-server-ssl-reloading-with-quarkus)
 
-## Contributing
+## Support
 
-There are plenty of ways to contribute to this project:
+Ayza needs your help!
 
-* Give it a star
-* Make a donation through [GitHub](https://github.com/sponsors/Hakky54) or [open collective](https://opencollective.com/hakky54)
-* Join the [Gitter room](https://gitter.im/hakky54/ayza) and leave a feedback or help with answering users questions
-* Submit a PR
+If you can, please consider sponsoring Ayza. Even a small donation would help us offset the recurring maintenance costs. With enough sponsors we would be able to make Ayza grow faster and stronger! You can sponsor it at [GitHub](https://github.com/sponsors/Hakky54), [Ko-fi](https://ko-fi.com/hakky54) or [open collective](https://opencollective.com/hakky54).
+
+If you are an industry user of Ayza and want to make sure it can keep growing and being maintained, please reach out!
+
+In any case, please star it on GitHub and share the word about it!
 
 ## Contributors ✨
 
