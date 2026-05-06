@@ -37,7 +37,7 @@
 
     <properties>
         <version.jetty>9.4.57.v20241219</version.jetty>
-        <version.jetty-reactive-httpclient>1.1.18</version.jetty-reactive-httpclient>
+        <version.jetty-reactive-httpclient>2.0.0</version.jetty-reactive-httpclient>
     </properties>
 
     <dependencies>
@@ -76,6 +76,30 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-reactive-httpclient</artifactId>
             <version>${version.jetty-reactive-httpclient}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-http</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-client</artifactId>
+            <version>${version.jetty}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
