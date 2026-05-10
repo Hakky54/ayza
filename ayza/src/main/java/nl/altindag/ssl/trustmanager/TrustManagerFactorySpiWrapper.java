@@ -23,8 +23,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactorySpi;
 import java.security.KeyStore;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * <strong>NOTE:</strong>

@@ -15,6 +15,8 @@
  */
 package nl.altindag.ssl.pem.util;
 
+import nl.altindag.laleler.IOUtils;
+import nl.altindag.laleler.ValidationUtils;
 import nl.altindag.ssl.SSLFactory;
 import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.pem.decryptor.PemDecryptor;
@@ -25,8 +27,6 @@ import nl.altindag.ssl.pem.exception.PrivateKeyParseException;
 import nl.altindag.ssl.pem.exception.PublicKeyParseException;
 import nl.altindag.ssl.util.KeyManagerUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
-import nl.altindag.ssl.util.internal.IOUtils;
-import nl.altindag.ssl.util.internal.ValidationUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -71,10 +71,10 @@ import java.util.function.UnaryOperator;
 
 import static nl.altindag.ssl.pem.util.PemType.CERTIFICATE;
 import static nl.altindag.ssl.pem.util.PemType.KEY;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toListAndThen;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotEmpty;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.CollectorsUtils.toListAndThen;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * Reads PEM formatted private keys and certificates
@@ -160,7 +160,7 @@ public final class PemUtils {
      * Loads certificates from the filesystem and maps it to a list of {@link X509Certificate}
      */
     public static List<X509Certificate> loadCertificate(Path... certificatePaths) {
-        return loadCertificate(certificatePaths, IOUtils::getFileAsStream);
+        return loadCertificate(certificatePaths, path -> IOUtils.getFileAsStream(path, GenericIOException::new));
     }
 
     /**
@@ -176,7 +176,7 @@ public final class PemUtils {
     private static <T> List<X509Certificate> loadCertificate(T[] resources, Function<T, InputStream> resourceMapper) {
         return Arrays.stream(resources)
                 .map(resourceMapper)
-                .map(IOUtils::getContent)
+                .map(inputStream -> IOUtils.getContent(inputStream, GenericIOException::new))
                 .map(PemUtils::parseCertificate)
                 .flatMap(Collection::stream)
                 .collect(toUnmodifiableList());
@@ -297,7 +297,7 @@ public final class PemUtils {
      * from the filesystem and maps it to an instance of {@link X509ExtendedKeyManager}
      */
     public static X509ExtendedKeyManager loadIdentityMaterial(Path certificateChainPath, Path privateKeyPath, char[] keyPassword) {
-        return loadIdentityMaterial(certificateChainPath, privateKeyPath, keyPassword, IOUtils::getFileAsStream);
+        return loadIdentityMaterial(certificateChainPath, privateKeyPath, keyPassword, path -> IOUtils.getFileAsStream(path, GenericIOException::new));
     }
 
     /**
@@ -336,7 +336,7 @@ public final class PemUtils {
      * from the filesystem and maps it to an instance of {@link X509ExtendedKeyManager}
      */
     public static X509ExtendedKeyManager loadIdentityMaterial(Path identityPath, char[] keyPassword) {
-        return loadIdentityMaterial(identityPath, keyPassword, IOUtils::getFileAsStream);
+        return loadIdentityMaterial(identityPath, keyPassword, path -> IOUtils.getFileAsStream(path, GenericIOException::new));
     }
 
     /**
@@ -363,8 +363,8 @@ public final class PemUtils {
         try(InputStream certificateChainStream = resourceMapper.apply(certificateChain);
             InputStream privateKeyStream = resourceMapper.apply(privateKey)) {
 
-            String certificateChainContent = IOUtils.getContent(certificateChainStream);
-            String privateKeyContent = IOUtils.getContent(privateKeyStream);
+            String certificateChainContent = IOUtils.getContent(certificateChainStream, GenericIOException::new);
+            String privateKeyContent = IOUtils.getContent(privateKeyStream, GenericIOException::new);
 
             return parseIdentityMaterial(certificateChainContent, privateKeyContent, keyPassword);
         } catch (IOException exception) {
@@ -374,7 +374,7 @@ public final class PemUtils {
 
     private static <T> X509ExtendedKeyManager loadIdentityMaterial(T identity, char[] keyPassword, Function<T, InputStream> resourceMapper) {
         try(InputStream identityStream = resourceMapper.apply(identity)) {
-            String identityContent = IOUtils.getContent(identityStream);
+            String identityContent = IOUtils.getContent(identityStream, GenericIOException::new);
             return parseIdentityMaterial(identityContent, identityContent, keyPassword);
         } catch (IOException exception) {
             throw new GenericIOException(exception);
@@ -441,7 +441,7 @@ public final class PemUtils {
      * Loads the private key from the filesystem and maps it to an instance of {@link PrivateKey}
      */
     public static PrivateKey loadPrivateKey(Path identityPath, char[] keyPassword) {
-        return loadPrivateKey(identityPath, keyPassword, IOUtils::getFileAsStream);
+        return loadPrivateKey(identityPath, keyPassword, path -> IOUtils.getFileAsStream(path, GenericIOException::new));
     }
 
     /**

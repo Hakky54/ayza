@@ -16,7 +16,7 @@
  */
 package nl.altindag.ssl.hostnameverifier;
 
-import nl.altindag.ssl.util.internal.StringUtils;
+import nl.altindag.laleler.StringUtils;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLPeerUnverifiedException;

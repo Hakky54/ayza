@@ -15,6 +15,7 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.CollectorsUtils;
 import nl.altindag.ssl.exception.GenericTrustManagerException;
 import nl.altindag.ssl.model.TrustManagerParameters;
 import nl.altindag.ssl.trustmanager.CertificateCapturingX509ExtendedTrustManager;
@@ -30,7 +31,6 @@ import nl.altindag.ssl.trustmanager.SystemX509ExtendedTrustManager;
 import nl.altindag.ssl.trustmanager.TrustManagerFactoryWrapper;
 import nl.altindag.ssl.trustmanager.UnsafeX509ExtendedTrustManager;
 import nl.altindag.ssl.trustmanager.X509TrustManagerWrapper;
-import nl.altindag.ssl.util.internal.CollectorsUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
@@ -58,8 +58,8 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toListAndThen;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotEmpty;
+import static nl.altindag.laleler.CollectorsUtils.toListAndThen;
+import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
 
 /**
  * @author Hakan Altindag

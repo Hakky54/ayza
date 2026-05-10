@@ -15,10 +15,10 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.HostUtils;
 import nl.altindag.ssl.SSLFactory;
 import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.model.ClientConfig;
-import nl.altindag.ssl.util.internal.HostUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
@@ -50,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
 
 /**
  * @author Hakan Altindag

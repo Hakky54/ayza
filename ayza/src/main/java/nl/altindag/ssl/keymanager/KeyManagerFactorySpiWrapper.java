@@ -23,7 +23,7 @@ import javax.net.ssl.KeyManagerFactorySpi;
 import javax.net.ssl.ManagerFactoryParameters;
 import java.security.KeyStore;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * <strong>NOTE:</strong>

@@ -15,12 +15,12 @@
  */
 package nl.altindag.ssl.trustmanager;
 
+import nl.altindag.laleler.StringUtils;
 import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.model.TrustManagerParameters;
 import nl.altindag.ssl.util.CertificateUtils;
 import nl.altindag.ssl.util.KeyStoreUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
-import nl.altindag.ssl.util.internal.StringUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
@@ -40,7 +40,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import static nl.altindag.ssl.util.internal.CollectionUtils.isEmpty;
+import static nl.altindag.laleler.CollectionUtils.isEmpty;
 
 /**
  * <strong>NOTE:</strong>

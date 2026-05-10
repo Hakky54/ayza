@@ -15,9 +15,9 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.IOUtils;
 import nl.altindag.ssl.exception.GenericCertificateException;
 import nl.altindag.ssl.exception.GenericIOException;
-import nl.altindag.ssl.util.internal.IOUtils;
 
 import javax.net.ssl.X509TrustManager;
 import javax.security.auth.x500.X500Principal;
@@ -58,9 +58,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toModifiableList;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.CollectorsUtils.toModifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * @author Hakan Altindag
@@ -122,7 +122,7 @@ public final class CertificateUtils {
     public static <T extends Certificate> void write(Path destination, T certificate) {
         try {
             byte[] encodedCertificate = certificate.getEncoded();
-            IOUtils.write(destination, encodedCertificate);
+            IOUtils.write(destination, encodedCertificate, GenericIOException::new);
         } catch (CertificateEncodingException e) {
             throw new GenericCertificateException(e);
         }
@@ -189,7 +189,7 @@ public final class CertificateUtils {
      */
     private static List<Certificate> parseCertificate(InputStream certificateStream) {
         List<Certificate> certificates;
-        byte[] certificateData = IOUtils.copyToByteArray(certificateStream);
+        byte[] certificateData = IOUtils.copyToByteArray(certificateStream, GenericIOException::new);
         String certificateContent = new String(certificateData, StandardCharsets.UTF_8);
 
         if (isPemFormatted(certificateContent)) {

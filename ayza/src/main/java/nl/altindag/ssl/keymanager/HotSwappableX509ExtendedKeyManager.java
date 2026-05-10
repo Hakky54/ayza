@@ -26,8 +26,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * <strong>NOTE:</strong>

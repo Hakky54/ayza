@@ -15,6 +15,7 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.UriUtils;
 import nl.altindag.ssl.exception.GenericKeyManagerException;
 import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.keymanager.AggregatedX509ExtendedKeyManager;
@@ -27,7 +28,6 @@ import nl.altindag.ssl.keymanager.KeyManagerFactoryWrapper;
 import nl.altindag.ssl.keymanager.LoggingX509ExtendedKeyManager;
 import nl.altindag.ssl.keymanager.X509KeyManagerWrapper;
 import nl.altindag.ssl.model.KeyStoreHolder;
-import nl.altindag.ssl.util.internal.UriUtils;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -58,13 +58,13 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static nl.altindag.ssl.util.internal.CollectionUtils.toUnmodifiableList;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toListAndThen;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toMapAndThen;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
-import static nl.altindag.ssl.util.internal.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotEmpty;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.CollectionUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toListAndThen;
+import static nl.altindag.laleler.CollectorsUtils.toMapAndThen;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
+import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * @author Hakan Altindag

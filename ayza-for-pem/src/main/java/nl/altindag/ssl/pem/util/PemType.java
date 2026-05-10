@@ -25,7 +25,7 @@ import org.bouncycastle.pkcs.PKCS8EncryptedPrivateKeyInfo;
 
 import java.util.List;
 
-import static nl.altindag.ssl.util.internal.CollectionUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectionUtils.toUnmodifiableList;
 
 enum PemType {
 

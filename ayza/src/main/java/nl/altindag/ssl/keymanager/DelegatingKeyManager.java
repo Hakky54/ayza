@@ -23,7 +23,7 @@ import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * <strong>NOTE:</strong>

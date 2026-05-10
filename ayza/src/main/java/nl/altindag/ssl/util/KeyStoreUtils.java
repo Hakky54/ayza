@@ -15,10 +15,11 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.CollectorsUtils;
+import nl.altindag.laleler.IOUtils;
+import nl.altindag.laleler.StringUtils;
+import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.exception.GenericKeyStoreException;
-import nl.altindag.ssl.util.internal.CollectorsUtils;
-import nl.altindag.ssl.util.internal.IOUtils;
-import nl.altindag.ssl.util.internal.StringUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
@@ -47,8 +48,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotEmpty;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * @author Hakan Altindag
@@ -108,7 +109,7 @@ public final class KeyStoreUtils {
     }
 
     private static KeyStore loadKeyStore(Path keystorePath, KeyStoreFunction<InputStream, KeyStore> mapper) {
-        try (InputStream keystoreInputStream = IOUtils.getFileAsStream(keystorePath)) {
+        try (InputStream keystoreInputStream = IOUtils.getFileAsStream(keystorePath, GenericIOException::new)) {
             return mapper.apply(keystoreInputStream);
         } catch (Exception e) {
             throw new GenericKeyStoreException(e);
@@ -348,7 +349,7 @@ public final class KeyStoreUtils {
     }
 
     public static void write(Path destination, KeyStore keyStore, char[] password) {
-        IOUtils.write(destination, outputStream -> keyStore.store(outputStream, password));
+        IOUtils.write(destination, outputStream -> keyStore.store(outputStream, password), GenericIOException::new);
     }
 
     /**

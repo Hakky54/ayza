@@ -15,7 +15,7 @@
  */
 package nl.altindag.ssl.keymanager;
 
-import nl.altindag.ssl.util.internal.HostUtils;
+import nl.altindag.laleler.HostUtils;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSocket;
