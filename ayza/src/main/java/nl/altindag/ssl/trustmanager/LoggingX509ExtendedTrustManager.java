@@ -15,7 +15,7 @@
  */
 package nl.altindag.ssl.trustmanager;
 
-import nl.altindag.ssl.util.internal.HostUtils;
+import nl.altindag.laleler.HostUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 

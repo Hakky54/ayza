@@ -16,6 +16,7 @@
 module nl.altindag.ssl {
 
     requires transitive nl.altindag.sude;
+    requires transitive nl.altindag.laleler;
 
     exports nl.altindag.ssl;
     exports nl.altindag.ssl.exception;
@@ -23,6 +24,5 @@ module nl.altindag.ssl {
     exports nl.altindag.ssl.trustmanager.trustoptions;
     exports nl.altindag.ssl.util;
     exports nl.altindag.ssl.sslcontext to java.base;
-    exports nl.altindag.ssl.util.internal to nl.altindag.ssl.pem;
 
 }

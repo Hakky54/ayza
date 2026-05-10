@@ -15,9 +15,9 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.laleler.CollectorsUtils;
+import nl.altindag.laleler.IOUtils;
 import nl.altindag.ssl.exception.GenericIOException;
-import nl.altindag.ssl.util.internal.CollectorsUtils;
-import nl.altindag.ssl.util.internal.IOUtils;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static nl.altindag.ssl.util.internal.CollectionUtils.toUnmodifiableList;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectionUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
 
 /**
  * @author Hakan Altindag
@@ -77,7 +77,7 @@ final class MacCertificateUtils extends OSCertificateUtils {
                 .distinct()
                 .map(MacCertificateUtils::createProcessForGettingCertificates)
                 .map(Process::getInputStream)
-                .map(IOUtils::getContent)
+                .map(inputStream -> IOUtils.getContent(inputStream, GenericIOException::new))
                 .collect(Collectors.joining(System.lineSeparator()));
 
         List<Certificate> certificatesFromKeyChains = CertificateUtils.parsePemCertificate(certificateContent);
@@ -101,7 +101,7 @@ final class MacCertificateUtils extends OSCertificateUtils {
         KEYCHAIN_LOOKUP_COMMANDS.stream()
                 .map(MacCertificateUtils::createProcessForGettingKeychainFile)
                 .map(Process::getInputStream)
-                .map(IOUtils::getContent)
+                .map(inputStream -> IOUtils.getContent(inputStream, GenericIOException::new))
                 .flatMap(content -> Stream.of(content.split(System.lineSeparator()))
                         .map(line -> line.replace(DOUBLE_QUOTES, EMPTY))
                         .map(String::trim))

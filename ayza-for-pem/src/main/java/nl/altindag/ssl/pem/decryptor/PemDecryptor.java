@@ -19,7 +19,7 @@ import nl.altindag.ssl.pem.util.PemUtils;
 import org.bouncycastle.openssl.PEMDecryptorProvider;
 import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotNull;
+import static nl.altindag.laleler.ValidationUtils.requireNotNull;
 
 /**
  * <strong>NOTE:</strong>

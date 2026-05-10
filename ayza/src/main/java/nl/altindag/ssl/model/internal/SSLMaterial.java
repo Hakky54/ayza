@@ -22,7 +22,7 @@ import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509ExtendedTrustManager;
 import java.util.List;
 
-import static nl.altindag.ssl.util.internal.CollectionUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectionUtils.toUnmodifiableList;
 
 /**
  * <p>

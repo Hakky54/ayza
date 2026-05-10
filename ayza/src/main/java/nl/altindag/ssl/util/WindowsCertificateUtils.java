@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
 
 final class WindowsCertificateUtils extends OSCertificateUtils {
 

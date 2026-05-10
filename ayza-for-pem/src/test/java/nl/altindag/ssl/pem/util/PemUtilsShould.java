@@ -15,6 +15,7 @@
  */
 package nl.altindag.ssl.pem.util;
 
+import nl.altindag.laleler.IOUtils;
 import nl.altindag.ssl.exception.GenericIOException;
 import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.pem.exception.CertificateParseException;
@@ -22,7 +23,6 @@ import nl.altindag.ssl.pem.exception.PemParseException;
 import nl.altindag.ssl.pem.exception.PrivateKeyParseException;
 import nl.altindag.ssl.pem.exception.PublicKeyParseException;
 import nl.altindag.ssl.util.KeyStoreUtils;
-import nl.altindag.ssl.util.internal.IOUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -55,12 +55,14 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -684,7 +686,7 @@ class PemUtilsShould {
         String identityContent = getResourceContent(PEM_LOCATION + "encrypted-identity.pem");
 
         try (MockedStatic<IOUtils> ioUtilsMockedStatic = mockStatic(IOUtils.class)) {
-            ioUtilsMockedStatic.when(() -> IOUtils.getContent(identityStream)).thenReturn(identityContent);
+            ioUtilsMockedStatic.when(() -> IOUtils.getContent(eq(identityStream), any(Function.class))).thenReturn(identityContent);
 
             doThrow(new IOException("KABOOM!!!"))
                     .when(identityStream)
@@ -722,8 +724,8 @@ class PemUtilsShould {
         String privateKeyContent = getResourceContent(PEM_LOCATION + "splitted-unencrypted-identity-containing-private-key.pem");
 
         try (MockedStatic<IOUtils> ioUtilsMockedStatic = mockStatic(IOUtils.class)) {
-            ioUtilsMockedStatic.when(() -> IOUtils.getContent(certificateChainStream)).thenReturn(certificateChainContent);
-            ioUtilsMockedStatic.when(() -> IOUtils.getContent(privateKeyStream)).thenReturn(privateKeyContent);
+            ioUtilsMockedStatic.when(() -> IOUtils.getContent(eq(certificateChainStream), any(Function.class))).thenReturn(certificateChainContent);
+            ioUtilsMockedStatic.when(() -> IOUtils.getContent(eq(privateKeyStream), any(Function.class))).thenReturn(privateKeyContent);
 
             doThrow(new IOException("KABOOM!!!"))
                     .when(certificateChainStream)

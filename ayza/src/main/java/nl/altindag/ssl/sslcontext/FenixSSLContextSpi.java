@@ -38,7 +38,7 @@ import java.security.SecureRandom;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
-import static nl.altindag.ssl.util.internal.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
+import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
 
 /**
  * @author Hakan Altindag

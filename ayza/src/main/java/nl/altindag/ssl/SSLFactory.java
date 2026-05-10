@@ -15,6 +15,8 @@
  */
 package nl.altindag.ssl;
 
+import nl.altindag.laleler.StringUtils;
+import nl.altindag.laleler.UriUtils;
 import nl.altindag.ssl.exception.GenericKeyStoreException;
 import nl.altindag.ssl.exception.GenericSecurityException;
 import nl.altindag.ssl.model.HostnameVerifierParameters;
@@ -33,8 +35,6 @@ import nl.altindag.ssl.util.SSLContextUtils;
 import nl.altindag.ssl.util.SSLParametersUtils;
 import nl.altindag.ssl.util.SSLSessionUtils;
 import nl.altindag.ssl.util.TrustManagerUtils;
-import nl.altindag.ssl.util.internal.StringUtils;
-import nl.altindag.ssl.util.internal.UriUtils;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
@@ -77,9 +77,9 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toStringArray;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotBlank;
-import static nl.altindag.ssl.util.internal.ValidationUtils.requireNotEmpty;
+import static nl.altindag.laleler.CollectorsUtils.toStringArray;
+import static nl.altindag.laleler.ValidationUtils.requireNotBlank;
+import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
 
 /**
  * @author Hakan Altindag

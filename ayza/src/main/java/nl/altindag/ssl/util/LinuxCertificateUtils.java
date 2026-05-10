@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static nl.altindag.ssl.util.internal.CollectorsUtils.toUnmodifiableList;
+import static nl.altindag.laleler.CollectorsUtils.toUnmodifiableList;
 
 /**
  * @author Hakan Altindag

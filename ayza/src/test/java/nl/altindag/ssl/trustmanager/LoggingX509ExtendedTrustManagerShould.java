@@ -15,10 +15,10 @@
  */
 package nl.altindag.ssl.trustmanager;
 
+import nl.altindag.laleler.HostUtils;
 import nl.altindag.log.LogCaptor;
 import nl.altindag.log.model.LogEvent;
 import nl.altindag.ssl.util.KeyStoreUtils;
-import nl.altindag.ssl.util.internal.HostUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 

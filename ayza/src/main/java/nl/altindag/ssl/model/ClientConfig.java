@@ -15,15 +15,15 @@
  */
 package nl.altindag.ssl.model;
 
+import nl.altindag.laleler.ValidationUtils;
 import nl.altindag.ssl.SSLFactory;
-import nl.altindag.ssl.util.internal.ValidationUtils;
 
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
 import java.time.Duration;
 import java.util.Optional;
 
-import static nl.altindag.ssl.util.internal.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
+import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
 
 public final class ClientConfig {
 

@@ -16,8 +16,8 @@
 package nl.altindag.ssl.util;
 
 
+import nl.altindag.laleler.IOUtils;
 import nl.altindag.ssl.exception.GenericIOException;
-import nl.altindag.ssl.util.internal.IOUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
