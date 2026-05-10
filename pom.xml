@@ -56,6 +56,7 @@
     <properties>
         <version.sude>2.0.2</version.sude>
         <version.laleler>1.0.0</version.laleler>
+        <version.desidero>1.0.0</version.desidero>
         <version.slf4j>2.0.17</version.slf4j>
         <version.junit>5.14.4</version.junit>
         <version.assertj-core>3.27.7</version.assertj-core>
@@ -86,6 +87,11 @@
                 <groupId>io.github.hakky54</groupId>
                 <artifactId>laleler</artifactId>
                 <version>${version.laleler}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.hakky54</groupId>
+                <artifactId>desidero</artifactId>
+                <version>${version.desidero}</version>
             </dependency>
 
             <dependency>
