@@ -44,10 +44,8 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -722,10 +720,6 @@ class KeyStoreUtilsShould {
                     .isInstanceOf(GenericKeyStoreException.class)
                     .hasMessageContaining("lazy");
         }
-    }
-
-    private void resetOsName() {
-        System.setProperty("os.name", ORIGINAL_OS_NAME);
     }
 
 }
