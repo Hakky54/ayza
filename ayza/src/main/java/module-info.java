@@ -17,6 +17,7 @@ module nl.altindag.ssl {
 
     requires transitive nl.altindag.sude;
     requires transitive nl.altindag.laleler;
+    requires transitive nl.altindag.desidero;
 
     exports nl.altindag.ssl;
     exports nl.altindag.ssl.exception;

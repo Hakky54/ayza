@@ -15,6 +15,7 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.desidero.OperatingSystem;
 import nl.altindag.laleler.CollectorsUtils;
 import nl.altindag.laleler.IOUtils;
 import nl.altindag.laleler.StringUtils;

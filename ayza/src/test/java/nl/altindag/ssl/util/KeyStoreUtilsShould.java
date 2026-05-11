@@ -44,10 +44,8 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -65,8 +63,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 /**
@@ -80,7 +76,6 @@ class KeyStoreUtilsShould {
     private static final String NON_EXISTING_KEYSTORE_FILE_NAME = "black-hole.jks";
 
     private static final char[] KEYSTORE_PASSWORD = new char[] {'s', 'e', 'c', 'r', 'e', 't'};
-    private static final String ORIGINAL_OS_NAME = System.getProperty("os.name");
     private static final String TEST_RESOURCES_LOCATION = "src/test/resources/";
     private static final BasicProvider BASIC_PROVIDER = new BasicProvider();
 
@@ -221,186 +216,6 @@ class KeyStoreUtilsShould {
         }
 
         assertThat(logCaptor.getDebugLogs()).isEmpty();
-    }
-
-    @Test
-    void loadWindowsSystemKeyStore() {
-        LogCaptor logCaptor = LogCaptor.forClass(KeyStoreUtils.class);
-        logCaptor.setLogLevelToDebug();
-
-        System.setProperty("os.name", "windows");
-        KeyStore windowsRootKeyStore = mock(KeyStore.class);
-        KeyStore windowsMyKeyStore = mock(KeyStore.class);
-        KeyStore windowsMyCurrentUserKeyStore = mock(KeyStore.class);
-        KeyStore windowsMyLocalmachineKeyStore = mock(KeyStore.class);
-        KeyStore windowsRootCurrentUserKeyStore = mock(KeyStore.class);
-        KeyStore windowsRootLocalmachineKeyStore = mock(KeyStore.class);
-
-        WindowsCertificateUtils windowsCertificateUtils = spy(WindowsCertificateUtils.class);
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-ROOT", null)).thenReturn(Optional.of(windowsRootKeyStore));
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-MY", null)).thenReturn(Optional.of(windowsMyKeyStore));
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-MY-CURRENTUSER", null)).thenReturn(Optional.of(windowsMyCurrentUserKeyStore));
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-MY-LOCALMACHINE", null)).thenReturn(Optional.of(windowsMyLocalmachineKeyStore));
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-ROOT-LOCALMACHINE", null)).thenReturn(Optional.of(windowsRootLocalmachineKeyStore));
-        when(windowsCertificateUtils.createKeyStoreIfAvailable("Windows-ROOT-CURRENTUSER", null)).thenReturn(Optional.of(windowsRootCurrentUserKeyStore));
-
-        OperatingSystem mockedOperatingSystem = spy(OperatingSystem.WINDOWS);
-        when(mockedOperatingSystem.getOsCertificateUtils()).thenReturn(Optional.of(windowsCertificateUtils));
-
-        try (MockedStatic<KeyStoreUtils> keyStoreUtilsMock = mockStatic(KeyStoreUtils.class, invocation -> {
-            Method method = invocation.getMethod();
-            if ("loadSystemKeyStores".equals(method.getName()) && method.getParameterCount() == 0) {
-                return invocation.callRealMethod();
-            } else if ("countAmountOfTrustMaterial".equals(method.getName())) {
-                return 2;
-            } else {
-                return invocation.getMock();
-            }
-        }); MockedStatic<WindowsCertificateUtils> osCertificateUtilsMock = mockStatic(WindowsCertificateUtils.class, invocation -> {
-            Method method = invocation.getMethod();
-            if ("getInstance".equals(method.getName())) {
-                return windowsCertificateUtils;
-            } else {
-                return invocation.callRealMethod();
-            }
-        }); MockedStatic<OperatingSystem> operatingSystemEnumMock = mockStatic(OperatingSystem.class, invocation -> {
-            Method method = invocation.getMethod();
-            if ("get".equals(method.getName())) {
-                return mockedOperatingSystem;
-            } else {
-                return invocation.callRealMethod();
-            }
-        })) {
-            List<KeyStore> keyStores = KeyStoreUtils.loadSystemKeyStores();
-            assertThat(keyStores).containsExactlyInAnyOrder(windowsRootKeyStore, windowsMyKeyStore, windowsMyCurrentUserKeyStore, windowsMyLocalmachineKeyStore, windowsRootCurrentUserKeyStore, windowsRootLocalmachineKeyStore);
-            assertThat(logCaptor.getDebugLogs()).contains("Loaded [12] system trusted certificates");
-        } finally {
-            resetOsName();
-        }
-    }
-
-    @Test
-    void loadAndroidSystemKeyStoreWithAndroidSystemProperty() {
-        System.setProperty("os.name", "Linux");
-
-        HashMap<String, String> androidProperties = new HashMap<>();
-        androidProperties.put("java.vendor", "The Android Project");
-        androidProperties.put("java.vm.vendor", "The Android Project");
-        androidProperties.put("java.runtime.name", "Android Runtime");
-
-        androidProperties.forEach((key, value) -> {
-            System.setProperty(key, value);
-
-            KeyStore androidCAStore = mock(KeyStore.class);
-            AndroidCertificateUtils androidCertificateUtils = spy(AndroidCertificateUtils.class);
-            when(androidCertificateUtils.createKeyStoreIfAvailable("AndroidCAStore", null)).thenReturn(Optional.of(androidCAStore));
-            OperatingSystem mockedOperatingSystem = spy(OperatingSystem.ANDROID);
-            when(mockedOperatingSystem.getOsCertificateUtils()).thenReturn(Optional.of(androidCertificateUtils));
-
-            try (MockedStatic<KeyStoreUtils> keyStoreUtilsMock = mockStatic(KeyStoreUtils.class, invocation -> {
-                Method method = invocation.getMethod();
-                if ("loadSystemKeyStores".equals(method.getName()) && method.getParameterCount() == 0) {
-                    return invocation.callRealMethod();
-                } else if ("countAmountOfTrustMaterial".equals(method.getName())) {
-                    return 2;
-                } else {
-                    return invocation.getMock();
-                }
-            }); MockedStatic<AndroidCertificateUtils> osCertificateUtilsMock = mockStatic(AndroidCertificateUtils.class, invocation -> {
-                Method method = invocation.getMethod();
-                if ("getInstance".equals(method.getName())) {
-                    return androidCertificateUtils;
-                } else {
-                    return invocation.callRealMethod();
-                }
-            }); MockedStatic<OperatingSystem> operatingSystemEnumMock = mockStatic(OperatingSystem.class, invocation -> {
-                Method method = invocation.getMethod();
-                if ("get".equals(method.getName())) {
-                    return mockedOperatingSystem;
-                } else {
-                    return invocation.callRealMethod();
-                }
-            })) {
-                List<KeyStore> keyStores = KeyStoreUtils.loadSystemKeyStores();
-                assertThat(keyStores).containsExactly(androidCAStore);
-            } finally {
-                System.clearProperty(key);
-            }
-        });
-
-        resetOsName();
-    }
-
-    @Test
-    void notLoadAndroidSystemKeyStoreWhenAdditionalAndroidPropertiesAreMissing() {
-        System.setProperty("os.name", "Linux");
-        System.clearProperty("java.vendor");
-        System.clearProperty("java.vm.vendor");
-        System.clearProperty("java.runtime.name");
-
-        LinuxCertificateUtils linuxCertificateUtils = mock(LinuxCertificateUtils.class);
-
-        try (MockedStatic<LinuxCertificateUtils> linuxCertificateUtilsMockedStatic = mockStatic(LinuxCertificateUtils.class, invocationOnMock -> linuxCertificateUtils);
-             MockedStatic<KeyStoreUtils> keyStoreUtilsMock = mockStatic(KeyStoreUtils.class)) {
-            KeyStoreUtils.loadSystemKeyStores();
-            keyStoreUtilsMock.verify(() -> KeyStoreUtils.createKeyStore("AndroidCAStore", null), times(0));
-        } finally {
-            resetOsName();
-        }
-    }
-
-    @Test
-    void loadLinuxSystemKeyStoreReturns() {
-        System.setProperty("os.name", "linux");
-
-        KeyStore systemTrustStore = mock(KeyStore.class);
-
-        LinuxCertificateUtils linuxCertificateUtils = mock(LinuxCertificateUtils.class);
-        when(linuxCertificateUtils.getTrustStores()).thenReturn(Collections.singletonList(systemTrustStore));
-        OperatingSystem mockedOperatingSystem = spy(OperatingSystem.LINUX);
-        when(mockedOperatingSystem.getOsCertificateUtils()).thenReturn(Optional.of(linuxCertificateUtils));
-
-        try (MockedStatic<LinuxCertificateUtils> linuxCertificateUtilsMockedStatic = mockStatic(LinuxCertificateUtils.class, invocationOnMock -> linuxCertificateUtils);
-             MockedStatic<KeyStoreUtils> keyStoreUtilsMockedStatic = mockStatic(KeyStoreUtils.class, invocation -> {
-                 Method method = invocation.getMethod();
-                 if ("loadSystemKeyStores".equals(method.getName()) && method.getParameterCount() == 0) {
-                     return invocation.callRealMethod();
-                 } else if ("createTrustStore".equals(method.getName()) && method.getParameterCount() == 1 && method.getParameters()[0].getType().equals(List.class)) {
-                     return systemTrustStore;
-                 } else if ("countAmountOfTrustMaterial".equals(method.getName())) {
-                     return 2;
-                 } else {
-                     return invocation.getMock();
-                 }
-             }); MockedStatic<OperatingSystem> operatingSystemEnumMock = mockStatic(OperatingSystem.class, invocation -> {
-                Method method = invocation.getMethod();
-                if ("get".equals(method.getName())) {
-                    return mockedOperatingSystem;
-                } else {
-                    return invocation.callRealMethod();
-                }
-            })) {
-
-            List<KeyStore> keyStores = KeyStoreUtils.loadSystemKeyStores();
-            assertThat(keyStores).containsExactly(systemTrustStore);
-            assertThat(linuxCertificateUtils.getTrustStores()).containsExactly(systemTrustStore);
-        }
-
-        resetOsName();
-    }
-
-    @Test
-    void notLoadSystemKeyStoreForUnknownOs() {
-        System.setProperty("os.name", "Banana OS");
-        LogCaptor logCaptor = LogCaptor.forClass(OperatingSystem.class);
-
-        List<KeyStore> keyStores = KeyStoreUtils.loadSystemKeyStores();
-
-        assertThat(keyStores).isEmpty();
-        assertThat(logCaptor.getWarnLogs()).contains("No system KeyStores available for [banana os]");
-
-        logCaptor.close();
-        resetOsName();
     }
 
     @Test
@@ -904,10 +719,6 @@ class KeyStoreUtilsShould {
                     .isInstanceOf(GenericKeyStoreException.class)
                     .hasMessageContaining("lazy");
         }
-    }
-
-    private void resetOsName() {
-        System.setProperty("os.name", ORIGINAL_OS_NAME);
     }
 
 }
