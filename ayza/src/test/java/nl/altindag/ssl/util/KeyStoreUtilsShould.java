@@ -76,7 +76,6 @@ class KeyStoreUtilsShould {
     private static final String NON_EXISTING_KEYSTORE_FILE_NAME = "black-hole.jks";
 
     private static final char[] KEYSTORE_PASSWORD = new char[] {'s', 'e', 'c', 'r', 'e', 't'};
-    private static final String ORIGINAL_OS_NAME = System.getProperty("os.name");
     private static final String TEST_RESOURCES_LOCATION = "src/test/resources/";
     private static final BasicProvider BASIC_PROVIDER = new BasicProvider();
 
