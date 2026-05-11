@@ -3,6 +3,11 @@
 This list is not intended to be all-encompassing - it will document major and breaking API
 changes with their rationale when appropriate:
 
+### v10.0.5
+- Moved generic internal utility classes to a separate public library named [Laleler](https://github.com/Hakky54/laleler)
+- Moved Operating System certificate handler to a separate public library named [Desidero](https://github.com/Hakky54/desidero)
+- Removed code duplication
+- Bumped dependencies
 ### v10.0.4
 - Improved performance of extracting server certificates
 - Bumped dependencies
