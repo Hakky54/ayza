@@ -57,7 +57,7 @@
         <version.sude>2.0.2</version.sude>
         <version.laleler>1.0.0</version.laleler>
         <version.desidero>1.0.0</version.desidero>
-        <version.slf4j>2.0.17</version.slf4j>
+        <version.slf4j>2.0.18</version.slf4j>
         <version.junit>5.14.4</version.junit>
         <version.assertj-core>3.27.7</version.assertj-core>
         <version.logcaptor>2.12.6</version.logcaptor>
