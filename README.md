@@ -610,7 +610,7 @@ SSLFactory sslFactory = SSLFactory.builder()
         .build();
 ```
 
-A proof-of-concept is available here: [GitHub - Trust Me](https://github.com/Hakky54/trust-me) which demonstrates how it can be integrated in a GUI and prompting the end-user to either trust or reject the server certificate. It will be applied instantly and the ssl configuration will be reloaded.
+A proof-of-concept is available here: [GitHub - Trust Me](https://github.com/Hakky54/java-tutorials/tree/main/trust-me) which demonstrates how it can be integrated in a GUI and prompting the end-user to either trust or reject the server certificate. It will be applied instantly and the ssl configuration will be reloaded.
 
 ##### Demo
 ![alt text](https://github.com/Hakky54/java-tutorials/blob/main/trust-me/images/demo.gif?raw=true)
