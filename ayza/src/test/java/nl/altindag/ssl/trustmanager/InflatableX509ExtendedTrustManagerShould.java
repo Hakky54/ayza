@@ -116,7 +116,7 @@ class InflatableX509ExtendedTrustManagerShould {
         assertThat(trustManager.getInnerTrustManager()).isInstanceOf(DummyX509ExtendedTrustManager.class);
 
         assertThat(trustManager.getAcceptedIssuers()).isEmpty();
-        assertThat(logCaptor.getLogs()).isEmpty();
+        assertThat(logCaptor.getLogs()).containsExactly("No trust store path has been specified. Creating an empty in-memory trust store");
     }
 
     @Test
@@ -130,7 +130,7 @@ class InflatableX509ExtendedTrustManagerShould {
         assertThat(trustManager.getInnerTrustManager()).isInstanceOf(DummyX509ExtendedTrustManager.class);
 
         assertThat(trustManager.getAcceptedIssuers()).isEmpty();
-        assertThat(logCaptor.getLogs()).isEmpty();
+        assertThat(logCaptor.getLogs()).containsExactly("No trust store path has been specified. Creating an empty in-memory trust store");
     }
 
     @Test
@@ -156,9 +156,11 @@ class InflatableX509ExtendedTrustManagerShould {
             trustManager.addCertificates(Arrays.asList(trustedCerts));
 
             List<LogEvent> logEvents = logCaptor.getLogEvents();
-            assertThat(logEvents).hasSize(1);
-            assertThat(logEvents.get(0).getLevel()).isEqualTo("ERROR");
-            assertThat(logEvents.get(0).getFormattedMessage()).contains("Cannot add certificate");
+            assertThat(logEvents).hasSize(2);
+            assertThat(logEvents.get(0).getFormattedMessage()).contains("No trust store path has been specified. Creating an empty in-memory trust store");
+
+            assertThat(logEvents.get(1).getLevel()).isEqualTo("ERROR");
+            assertThat(logEvents.get(1).getFormattedMessage()).contains("Cannot add certificate");
         }
     }
 
@@ -564,9 +566,12 @@ class InflatableX509ExtendedTrustManagerShould {
             assertThat(trustManager.getAcceptedIssuers()).hasSize(1);
 
             List<LogEvent> logEvents = logCaptor.getLogEvents();
-            assertThat(logEvents).hasSize(1);
+            assertThat(logEvents).hasSize(3);
 
-            LogEvent logEvent = logEvents.get(0);
+            assertThat(logEvents.get(0).getMessage()).contains("Trying to load the trust store from");
+            assertThat(logEvents.get(1).getMessage()).contains("Trust store loaded successfully");
+
+            LogEvent logEvent = logEvents.get(2);
             assertThat(logEvent.getLevel()).isEqualTo("ERROR");
             assertThat(logEvent.getMessage()).isEqualTo("Cannot add certificate");
             assertThat(logEvent.getThrowable()).isPresent();
