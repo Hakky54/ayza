@@ -3,6 +3,10 @@
 This list is not intended to be all-encompassing - it will document major and breaking API
 changes with their rationale when appropriate:
 
+### v10.0.6
+ - Added additional log statements in InflatableX509ExtendedTrustManager
+ - Bumped dependencies
+ - Moved dependency version declaration of Sude, Laleler and Desidero from parent pom to Ayza Core library
 ### v10.0.5
 - Moved generic internal utility classes to a separate public library named [Laleler](https://github.com/Hakky54/laleler)
 - Moved Operating System certificate handler to a separate public library named [Desidero](https://github.com/Hakky54/desidero)
