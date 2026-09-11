@@ -797,6 +797,11 @@ public final class SSLFactory {
             return this;
         }
 
+        public Builder withEnforcedCiphersOrder() {
+            this.sslParameters.setUseCipherSuitesOrder(true);
+            return this;
+        }
+
         public Builder withSystemPropertyDerivedCiphers() {
             ciphers.addAll(extractPropertyValues("https.cipherSuites"));
             return this;

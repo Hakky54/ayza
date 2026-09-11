@@ -1535,6 +1535,72 @@ class SSLFactoryShould {
     }
 
     @Test
+    void buildSSLFactoryWithOrderedCiphers() throws IOException {
+        List<String> ciphersOrderedOneWay = Arrays.asList("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256");
+        List<String> ciphersOrderedOtherWay = Arrays.asList("TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");
+
+        SSLFactory sslFactory = SSLFactory.builder()
+                .withDefaultTrustMaterial()
+                .withCiphers(ciphersOrderedOneWay.toArray(new String[0]))
+                .withEnforcedCiphersOrder()
+                .build();
+
+        assertThat(sslFactory.getCiphers())
+                .containsExactlyElementsOf(ciphersOrderedOneWay)
+                .doesNotContainSequence(ciphersOrderedOtherWay);
+
+        assertThat(sslFactory.getSslContext().getDefaultSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(sslFactory.getSslContext().getDefaultSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOneWay)
+                .doesNotContainSequence(ciphersOrderedOtherWay);
+
+        assertThat(sslFactory.getSSLEngine().getSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(sslFactory.getSSLEngine().getSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOneWay)
+                .doesNotContainSequence(ciphersOrderedOtherWay);
+
+        SSLServerSocket socket = (SSLServerSocket) sslFactory.getSslServerSocketFactory().createServerSocket();
+        assertThat(socket.getSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(socket.getEnabledCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOneWay)
+                .doesNotContainSequence(ciphersOrderedOtherWay);
+        assertThat(socket.getSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOneWay)
+                .doesNotContainSequence(ciphersOrderedOtherWay);
+        socket.close();
+
+        sslFactory = SSLFactory.builder()
+                .withDefaultTrustMaterial()
+                .withCiphers(ciphersOrderedOtherWay.toArray(new String[0]))
+                .withEnforcedCiphersOrder()
+                .build();
+
+        assertThat(sslFactory.getCiphers())
+                .containsExactlyElementsOf(ciphersOrderedOtherWay)
+                .doesNotContainSequence(ciphersOrderedOneWay);
+
+        assertThat(sslFactory.getSslContext().getDefaultSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(sslFactory.getSslContext().getDefaultSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOtherWay)
+                .doesNotContainSequence(ciphersOrderedOneWay);
+
+        assertThat(sslFactory.getSSLEngine().getSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(sslFactory.getSSLEngine().getSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOtherWay)
+                .doesNotContainSequence(ciphersOrderedOneWay);
+
+        socket = (SSLServerSocket) sslFactory.getSslServerSocketFactory().createServerSocket();
+        assertThat(socket.getSSLParameters().getUseCipherSuitesOrder()).isTrue();
+        assertThat(socket.getEnabledCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOtherWay)
+                .doesNotContainSequence(ciphersOrderedOneWay);
+        assertThat(socket.getSSLParameters().getCipherSuites())
+                .containsExactlyElementsOf(ciphersOrderedOtherWay)
+                .doesNotContainSequence(ciphersOrderedOneWay);
+        socket.close();
+    }
+
+    @Test
     void throwExceptionWhenSystemPropertyDerivedProtocolsIsEmpty() {
         String propertyName = "https.protocols";
         System.setProperty(propertyName, "");
