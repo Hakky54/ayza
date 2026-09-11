@@ -50,6 +50,9 @@ public final class SSLParametersUtils {
         if (source.getNeedClientAuth()) {
             target.setNeedClientAuth(true);
         }
+
+        target.setUseCipherSuitesOrder(source.getUseCipherSuitesOrder());
+
         return target;
     }
 
@@ -99,6 +102,8 @@ public final class SSLParametersUtils {
         if (needClientAuth) {
             target.setNeedClientAuth(true);
         }
+
+        target.setUseCipherSuitesOrder(baseSslParameters.getUseCipherSuitesOrder());
 
         return target;
     }

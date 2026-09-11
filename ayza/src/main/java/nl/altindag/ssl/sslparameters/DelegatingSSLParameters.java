@@ -24,6 +24,8 @@ public class DelegatingSSLParameters extends SSLParameters {
 
     public DelegatingSSLParameters(SSLParameters sslParameters) {
         this.sslParameters = sslParameters;
+        // the setter and getters are final for some methods and therefor are not set in the inner SSLParameters but delegated to the properties of the super class
+        this.setUseCipherSuitesOrder(sslParameters.getUseCipherSuitesOrder());
     }
 
     public SSLParameters getInnerSslParameters() {
