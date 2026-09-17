@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author Hakan Altindag
@@ -32,6 +33,10 @@ public final class SSLParametersUtils {
     }
 
     public static SSLParameters copy(SSLParameters source) {
+        return copy(source, sslParameters -> {});
+    }
+
+    public static SSLParameters copy(SSLParameters source, Consumer<SSLParameters> sslParametersEnhancer) {
         if (source instanceof HotSwappableSSLParameters) {
             HotSwappableSSLParameters swappableSslParameters = (HotSwappableSSLParameters) source;
             SSLParameters innerSslParameters = swappableSslParameters.getInnerSslParameters();
@@ -51,7 +56,7 @@ public final class SSLParametersUtils {
             target.setNeedClientAuth(true);
         }
 
-        target.setUseCipherSuitesOrder(source.getUseCipherSuitesOrder());
+        sslParametersEnhancer.accept(target);
 
         return target;
     }

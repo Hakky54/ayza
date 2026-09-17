@@ -21,6 +21,7 @@ import javax.net.ssl.SSLParameters;
 import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509ExtendedTrustManager;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static nl.altindag.laleler.CollectionUtils.toUnmodifiableList;
 
@@ -39,6 +40,7 @@ public final class SSLMaterial {
     private X509ExtendedTrustManager trustManager;
     private HostnameVerifier hostnameVerifier;
     private SSLParameters sslParameters;
+    private Consumer<SSLParameters> sslParametersEnhancer;
 
     private SSLMaterial() {}
 
@@ -56,6 +58,10 @@ public final class SSLMaterial {
 
     public SSLParameters getSslParameters() {
         return sslParameters;
+    }
+
+    public Consumer<SSLParameters> getSslParametersEnhancer() {
+        return sslParametersEnhancer;
     }
 
     public HostnameVerifier getHostnameVerifier() {
@@ -77,6 +83,7 @@ public final class SSLMaterial {
         private X509ExtendedTrustManager trustManager;
         private HostnameVerifier hostnameVerifier;
         private SSLParameters sslParameters;
+        private Consumer<SSLParameters> sslParametersEnhancer;
 
         public Builder withSslContext(SSLContext sslContext) {
             this.sslContext = sslContext;
@@ -90,6 +97,11 @@ public final class SSLMaterial {
 
         public Builder withSslParameters(SSLParameters sslParameters) {
             this.sslParameters = sslParameters;
+            return this;
+        }
+
+        public Builder withSslParametersEnhancer(Consumer<SSLParameters> sslParametersEnhancer) {
+            this.sslParametersEnhancer = sslParametersEnhancer;
             return this;
         }
 
@@ -110,6 +122,7 @@ public final class SSLMaterial {
             sslMaterial.trustManager = trustManager;
             sslMaterial.hostnameVerifier = hostnameVerifier;
             sslMaterial.sslParameters = sslParameters;
+            sslMaterial.sslParametersEnhancer = sslParametersEnhancer;
             return sslMaterial;
         }
     }

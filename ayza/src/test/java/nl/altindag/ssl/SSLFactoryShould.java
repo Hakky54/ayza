@@ -1535,14 +1535,14 @@ class SSLFactoryShould {
     }
 
     @Test
-    void buildSSLFactoryWithOrderedCiphers() throws IOException {
+    void buildSSLFactoryWithOrderedCiphersFromEnhancer() throws IOException {
         List<String> ciphersOrderedOneWay = Arrays.asList("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256");
         List<String> ciphersOrderedOtherWay = Arrays.asList("TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256", "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");
 
         SSLFactory sslFactory = SSLFactory.builder()
                 .withDefaultTrustMaterial()
                 .withCiphers(ciphersOrderedOneWay.toArray(new String[0]))
-                .withEnforcedCiphersOrder()
+                .withSslParametersEnhancer(sslParameters -> sslParameters.setUseCipherSuitesOrder(true))
                 .build();
 
         assertThat(sslFactory.getCiphers())
@@ -1572,7 +1572,7 @@ class SSLFactoryShould {
         sslFactory = SSLFactory.builder()
                 .withDefaultTrustMaterial()
                 .withCiphers(ciphersOrderedOtherWay.toArray(new String[0]))
-                .withEnforcedCiphersOrder()
+                .withSslParametersEnhancer(sslParameters -> sslParameters.setUseCipherSuitesOrder(true))
                 .build();
 
         assertThat(sslFactory.getCiphers())

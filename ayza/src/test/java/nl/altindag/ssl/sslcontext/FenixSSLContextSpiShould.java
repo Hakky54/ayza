@@ -33,7 +33,7 @@ class FenixSSLContextSpiShould {
     void ignoreProvidedParametersAndDebugLogWhenEngineInitIsBeingCalled() {
         LogCaptor logCaptor = LogCaptor.forClass(FenixSSLContextSpi.class);
 
-        FenixSSLContextSpi sslContextSpi = new FenixSSLContextSpi(null, null);
+        FenixSSLContextSpi sslContextSpi = new FenixSSLContextSpi(null, null, null);
         sslContextSpi.engineInit(null, null, null);
 
         assertThat(logCaptor.getDebugLogs())

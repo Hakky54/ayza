@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.function.Consumer;
 
 import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
 import static nl.altindag.laleler.ValidationUtils.requireNotNull;
@@ -42,10 +43,12 @@ public final class FenixSSLSocketFactory extends SSLSocketFactory {
 
     private final SSLSocketFactory sslSocketFactory;
     private final SSLParameters sslParameters;
+    private final Consumer<SSLParameters> sslParametersEnhancer;
 
-    public FenixSSLSocketFactory(SSLSocketFactory sslSocketFactory, SSLParameters sslParameters) {
+    public FenixSSLSocketFactory(SSLSocketFactory sslSocketFactory, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
         this.sslSocketFactory = requireNotNull(sslSocketFactory, GENERIC_EXCEPTION_MESSAGE.apply("SSLSocketFactory"));
         this.sslParameters = requireNotNull(sslParameters, GENERIC_EXCEPTION_MESSAGE.apply("SSLParameters"));
+        this.sslParametersEnhancer = requireNotNull(sslParametersEnhancer, GENERIC_EXCEPTION_MESSAGE.apply("SSLParametersEnhancer"));
     }
 
     @Override
@@ -103,7 +106,7 @@ public final class FenixSSLSocketFactory extends SSLSocketFactory {
     private Socket withSslParameters(Socket socket) {
         if (socket instanceof SSLSocket) {
             SSLSocket sslSocket = (SSLSocket) socket;
-            sslSocket.setSSLParameters(SSLParametersUtils.copy(sslParameters));
+            sslSocket.setSSLParameters(SSLParametersUtils.copy(sslParameters, sslParametersEnhancer));
 
             if (sslParameters instanceof HotSwappableSSLParameters) {
                 return new FenixSSLSocket(sslSocket, sslParameters);

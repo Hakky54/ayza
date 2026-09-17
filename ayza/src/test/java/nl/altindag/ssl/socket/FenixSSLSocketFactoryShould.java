@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -57,8 +58,9 @@ class FenixSSLSocketFactoryShould {
     );
 
     private final SSLSocketFactory sslSocketFactory = mock(SSLSocketFactory.class);
+    private final Consumer<SSLParameters> sslParametersEnhancer = mock(Consumer.class);
 
-    private final FenixSSLSocketFactory victim = new FenixSSLSocketFactory(sslSocketFactory, sslParameters);
+    private final FenixSSLSocketFactory victim = new FenixSSLSocketFactory(sslSocketFactory, sslParameters, sslParametersEnhancer);
 
     @Test
     void returnDefaultCipherSuites() {
@@ -98,7 +100,7 @@ class FenixSSLSocketFactoryShould {
         doReturn(mockedSslSocket).when(sslSocketFactory).createSocket();
 
         try (MockedStatic<SSLParameters> mockedStatic = mockStatic(SSLParameters.class)) {
-            FenixSSLSocketFactory victim = new FenixSSLSocketFactory(sslSocketFactory, SSLParametersUtils.createSwappableSslParameters(sslParameters));
+            FenixSSLSocketFactory victim = new FenixSSLSocketFactory(sslSocketFactory, SSLParametersUtils.createSwappableSslParameters(sslParameters), sslParametersEnhancer);
             Socket socket = victim.createSocket();
 
             assertThat(socket).isNotNull().isInstanceOf(FenixSSLSocket.class);
