@@ -27,10 +27,6 @@ import java.util.function.Consumer;
  */
 public final class FenixSSLContext extends SSLContext {
 
-    public FenixSSLContext(SSLContext baseSslContext, SSLParameters baseSslParameters) {
-        this(baseSslContext, baseSslParameters, sp -> {});
-    }
-
     public FenixSSLContext(SSLContext baseSslContext, SSLParameters baseSslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
         super(new FenixSSLContextSpi(baseSslContext, baseSslParameters, sslParametersEnhancer), baseSslContext.getProvider(), baseSslContext.getProtocol());
     }
