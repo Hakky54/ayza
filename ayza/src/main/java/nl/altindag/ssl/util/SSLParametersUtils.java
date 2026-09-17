@@ -121,7 +121,18 @@ public final class SSLParametersUtils {
      * @return Swappable SSLParameters
      */
     public static SSLParameters createSwappableSslParameters(SSLParameters sslParameters) {
-        return new HotSwappableSSLParameters(sslParameters);
+        return createSwappableSslParameters(sslParameters, sp -> {});
+    }
+
+    /**
+     * Wraps the given SSLParameters into an instance of a Hot Swappable SSLParameters.
+     * This type of SSLParameters has the capability of swapping in and out different SSLParameters at runtime.
+     *
+     * @param sslParameters To be wrapped SSLParameters
+     * @return Swappable SSLParameters
+     */
+    public static SSLParameters createSwappableSslParameters(SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return new HotSwappableSSLParameters(sslParameters, sslParametersEnhancer);
     }
 
 }

@@ -1001,7 +1001,7 @@ public final class SSLFactory {
 
             SSLParameters mergedSslParameters = SSLParametersUtils.merge(sslParameters, defaultSSLParameters, excludedCiphers, excludedProtocols);
             sslParametersEnhancer.accept(mergedSslParameters);
-            return swappableSslParametersEnabled ? SSLParametersUtils.createSwappableSslParameters(mergedSslParameters) : mergedSslParameters;
+            return swappableSslParametersEnabled ? SSLParametersUtils.createSwappableSslParameters(mergedSslParameters, sslParametersEnhancer) : mergedSslParameters;
         }
 
     }
