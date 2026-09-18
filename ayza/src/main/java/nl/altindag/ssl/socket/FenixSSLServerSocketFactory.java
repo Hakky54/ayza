@@ -24,6 +24,7 @@ import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.function.Consumer;
 
 import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
 import static nl.altindag.laleler.ValidationUtils.requireNotNull;
@@ -40,10 +41,12 @@ public final class FenixSSLServerSocketFactory extends SSLServerSocketFactory {
 
     private final SSLServerSocketFactory sslServerSocketFactory;
     private final SSLParameters sslParameters;
+    private final Consumer<SSLParameters> sslParametersEnhancer;
 
-    public FenixSSLServerSocketFactory(SSLServerSocketFactory sslServerSocketFactory, SSLParameters sslParameters) {
+    public FenixSSLServerSocketFactory(SSLServerSocketFactory sslServerSocketFactory, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
         this.sslServerSocketFactory = requireNotNull(sslServerSocketFactory, GENERIC_EXCEPTION_MESSAGE.apply("SSLServerSocketFactory"));
         this.sslParameters = requireNotNull(sslParameters, GENERIC_EXCEPTION_MESSAGE.apply("SSLParameters"));
+        this.sslParametersEnhancer = requireNotNull(sslParametersEnhancer, GENERIC_EXCEPTION_MESSAGE.apply("SSLParametersEnhancer"));
     }
 
     @Override
@@ -83,7 +86,7 @@ public final class FenixSSLServerSocketFactory extends SSLServerSocketFactory {
     private ServerSocket withSslParameters(ServerSocket socket) throws IOException {
         if (socket instanceof SSLServerSocket) {
             SSLServerSocket sslSocket = (SSLServerSocket) socket;
-            sslSocket.setSSLParameters(SSLParametersUtils.copy(sslParameters));
+            sslSocket.setSSLParameters(SSLParametersUtils.copy(sslParameters, sslParametersEnhancer));
 
             if (sslParameters instanceof HotSwappableSSLParameters) {
                 return new FenixSSLServerSocket(sslSocket, sslParameters);

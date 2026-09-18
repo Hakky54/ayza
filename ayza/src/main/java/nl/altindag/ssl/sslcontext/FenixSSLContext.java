@@ -17,6 +17,7 @@ package nl.altindag.ssl.sslcontext;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
+import java.util.function.Consumer;
 
 /**
  * <strong>NOTE:</strong>
@@ -26,8 +27,8 @@ import javax.net.ssl.SSLParameters;
  */
 public final class FenixSSLContext extends SSLContext {
 
-    public FenixSSLContext(SSLContext baseSslContext, SSLParameters baseSslParameters) {
-        super(new FenixSSLContextSpi(baseSslContext, baseSslParameters), baseSslContext.getProvider(), baseSslContext.getProtocol());
+    public FenixSSLContext(SSLContext baseSslContext, SSLParameters baseSslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        super(new FenixSSLContextSpi(baseSslContext, baseSslParameters, sslParametersEnhancer), baseSslContext.getProvider(), baseSslContext.getProtocol());
     }
 
 }

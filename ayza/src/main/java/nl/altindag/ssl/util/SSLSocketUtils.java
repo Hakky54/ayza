@@ -23,6 +23,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocketFactory;
+import java.util.function.Consumer;
 
 /**
  * @author Hakan Altindag
@@ -32,11 +33,19 @@ public final class SSLSocketUtils {
     private SSLSocketUtils() {}
 
     public static SSLSocketFactory createSslSocketFactory(SSLContext sslContext, SSLParameters sslParameters) {
-        return new FenixSSLSocketFactory(sslContext.getSocketFactory(), sslParameters);
+        return createSslSocketFactory(sslContext, sslParameters, sp -> {});
+    }
+
+    public static SSLSocketFactory createSslSocketFactory(SSLContext sslContext, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return new FenixSSLSocketFactory(sslContext.getSocketFactory(), sslParameters, sslParametersEnhancer);
     }
 
     public static SSLSocketFactory createSslSocketFactory(SSLSocketFactory sslSocketFactory, SSLParameters sslParameters) {
-        return new FenixSSLSocketFactory(sslSocketFactory, sslParameters);
+        return createSslSocketFactory(sslSocketFactory, sslParameters, sp -> {});
+    }
+
+    public static SSLSocketFactory createSslSocketFactory(SSLSocketFactory sslSocketFactory, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return new FenixSSLSocketFactory(sslSocketFactory, sslParameters, sslParametersEnhancer);
     }
 
     public static SSLSocketFactory createUnsafeSslSocketFactory() {
@@ -47,11 +56,19 @@ public final class SSLSocketUtils {
     }
 
     public static SSLServerSocketFactory createSslServerSocketFactory(SSLContext sslContext, SSLParameters sslParameters) {
-        return new FenixSSLServerSocketFactory(sslContext.getServerSocketFactory(), sslParameters);
+        return createSslServerSocketFactory(sslContext, sslParameters, sp -> {});
+    }
+
+    public static SSLServerSocketFactory createSslServerSocketFactory(SSLContext sslContext, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return createSslServerSocketFactory(sslContext.getServerSocketFactory(), sslParameters, sslParametersEnhancer);
     }
 
     public static SSLServerSocketFactory createSslServerSocketFactory(SSLServerSocketFactory sslServerSocketFactory, SSLParameters sslParameters) {
-        return new FenixSSLServerSocketFactory(sslServerSocketFactory, sslParameters);
+        return createSslServerSocketFactory(sslServerSocketFactory, sslParameters, sp -> {});
+    }
+
+    public static SSLServerSocketFactory createSslServerSocketFactory(SSLServerSocketFactory sslServerSocketFactory, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return new FenixSSLServerSocketFactory(sslServerSocketFactory, sslParameters, sslParametersEnhancer);
     }
 
 }

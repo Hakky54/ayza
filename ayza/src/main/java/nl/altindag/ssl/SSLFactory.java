@@ -71,6 +71,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -143,7 +144,7 @@ public final class SSLFactory {
     }
 
     public SSLParameters getSslParameters() {
-        return SSLParametersUtils.copy(sslMaterial.getSslParameters());
+        return SSLParametersUtils.copy(sslMaterial.getSslParameters(), sslMaterial.getSslParametersEnhancer());
     }
 
     public SSLEngine getSSLEngine() {
@@ -186,6 +187,7 @@ public final class SSLFactory {
         private SecureRandom secureRandom = null;
         private HostnameVerifier hostnameVerifier = HostnameVerifierUtils.createDefault();
         private Predicate<HostnameVerifierParameters> hostnameVerifierEnhancer = null;
+        private Consumer <SSLParameters> sslParametersEnhancer = sp -> {};
 
         private final List<KeyStoreHolder> identities = new ArrayList<>();
         private final List<KeyStore> trustStores = new ArrayList<>();
@@ -797,6 +799,11 @@ public final class SSLFactory {
             return this;
         }
 
+        public Builder withSslParametersEnhancer(Consumer<SSLParameters> sslParametersEnhancer) {
+            this.sslParametersEnhancer = sslParametersEnhancer;
+            return this;
+        }
+
         public Builder withSystemPropertyDerivedCiphers() {
             ciphers.addAll(extractPropertyValues("https.cipherSuites"));
             return this;
@@ -922,7 +929,7 @@ public final class SSLFactory {
             }
 
             SSLParameters baseSslParameters = createSslParameters(baseSslContext);
-            SSLContext sslContext = new FenixSSLContext(baseSslContext, baseSslParameters);
+            SSLContext sslContext = new FenixSSLContext(baseSslContext, baseSslParameters, sslParametersEnhancer);
 
             HostnameVerifier resolvedHostnameVerifier = Optional.ofNullable(hostnameVerifierEnhancer)
                     .map(enhancer -> HostnameVerifierUtils.createEnhanceable(hostnameVerifier, enhancer))
@@ -933,6 +940,7 @@ public final class SSLFactory {
                     .withKeyManager(keyManager)
                     .withTrustManager(trustManager)
                     .withSslParameters(baseSslParameters)
+                    .withSslParametersEnhancer(sslParametersEnhancer)
                     .withHostnameVerifier(resolvedHostnameVerifier)
                     .build();
 
@@ -992,7 +1000,8 @@ public final class SSLFactory {
             sslParameters.setProtocols(preferredProtocols);
 
             SSLParameters mergedSslParameters = SSLParametersUtils.merge(sslParameters, defaultSSLParameters, excludedCiphers, excludedProtocols);
-            return swappableSslParametersEnabled ? SSLParametersUtils.createSwappableSslParameters(mergedSslParameters) : mergedSslParameters;
+            sslParametersEnhancer.accept(mergedSslParameters);
+            return swappableSslParametersEnabled ? SSLParametersUtils.createSwappableSslParameters(mergedSslParameters, sslParametersEnhancer) : mergedSslParameters;
         }
 
     }

@@ -59,6 +59,22 @@ class SSLSocketUtilsShould {
     }
 
     @Test
+    void createSslSocketFactoryFromSslContext() throws NoSuchAlgorithmException {
+        SSLParameters sslParameters = spy(
+                new SSLParameters(
+                        new String[]{"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384"},
+                        new String[]{"TLSv1.2"}
+                )
+        );
+
+        SSLSocketFactory victim = SSLSocketUtils.createSslSocketFactory(SSLContext.getDefault(), sslParameters);
+        String[] defaultCipherSuites = victim.getDefaultCipherSuites();
+
+        assertThat(defaultCipherSuites).containsExactly("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");
+        verify(sslParameters, times(1)).getCipherSuites();
+    }
+
+    @Test
     void createSslServerSocketFactory() throws NoSuchAlgorithmException {
         SSLParameters sslParameters = spy(
                 new SSLParameters(
@@ -70,6 +86,22 @@ class SSLSocketUtilsShould {
         SSLServerSocketFactory socketFactory = SSLContext.getDefault().getServerSocketFactory();
 
         SSLServerSocketFactory victim = SSLSocketUtils.createSslServerSocketFactory(socketFactory, sslParameters);
+        String[] defaultCipherSuites = victim.getDefaultCipherSuites();
+
+        assertThat(defaultCipherSuites).containsExactly("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");
+        verify(sslParameters, times(1)).getCipherSuites();
+    }
+
+    @Test
+    void createSslServerSocketFactoryFromSslContext() throws NoSuchAlgorithmException {
+        SSLParameters sslParameters = spy(
+                new SSLParameters(
+                        new String[]{"TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384"},
+                        new String[]{"TLSv1.2"}
+                )
+        );
+
+        SSLServerSocketFactory victim = SSLSocketUtils.createSslServerSocketFactory(SSLContext.getDefault(), sslParameters);
         String[] defaultCipherSuites = victim.getDefaultCipherSuites();
 
         assertThat(defaultCipherSuites).containsExactly("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384");

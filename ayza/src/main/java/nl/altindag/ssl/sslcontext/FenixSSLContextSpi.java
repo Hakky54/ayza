@@ -36,6 +36,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import static java.util.Objects.nonNull;
 import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
@@ -49,10 +50,12 @@ public final class FenixSSLContextSpi extends SSLContextSpi {
 
     private final SSLContext sslContext;
     private final SSLParameters sslParameters;
+    private final Consumer<SSLParameters> sslParametersEnhancer;
 
-    FenixSSLContextSpi(SSLContext sslContext, SSLParameters sslParameters) {
+    FenixSSLContextSpi(SSLContext sslContext, SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
         this.sslContext = sslContext;
         this.sslParameters = sslParameters;
+        this.sslParametersEnhancer = sslParametersEnhancer;
     }
 
     public FenixSSLContextSpi() {
@@ -65,6 +68,7 @@ public final class FenixSSLContextSpi extends SSLContextSpi {
 
         sslContext = sslFactory.get().getSslContext();
         sslParameters = sslFactory.get().getSslParameters();
+        sslParametersEnhancer = sp -> {};
     }
 
     @Override
@@ -74,12 +78,12 @@ public final class FenixSSLContextSpi extends SSLContextSpi {
 
     @Override
     protected SSLSocketFactory engineGetSocketFactory() {
-        return SSLSocketUtils.createSslSocketFactory(sslContext, engineGetDefaultSSLParameters());
+        return SSLSocketUtils.createSslSocketFactory(sslContext, engineGetDefaultSSLParameters(), sslParametersEnhancer);
     }
 
     @Override
     protected SSLServerSocketFactory engineGetServerSocketFactory() {
-        return SSLSocketUtils.createSslServerSocketFactory(sslContext, engineGetDefaultSSLParameters());
+        return SSLSocketUtils.createSslServerSocketFactory(sslContext, engineGetDefaultSSLParameters(), sslParametersEnhancer);
     }
 
     @Override
@@ -116,7 +120,7 @@ public final class FenixSSLContextSpi extends SSLContextSpi {
 
     @Override
     protected SSLParameters engineGetDefaultSSLParameters() {
-        return SSLParametersUtils.copy(sslParameters);
+        return SSLParametersUtils.copy(sslParameters, sslParametersEnhancer);
     }
 
     @Override

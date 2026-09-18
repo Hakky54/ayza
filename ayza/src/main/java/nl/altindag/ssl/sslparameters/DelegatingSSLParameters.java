@@ -17,13 +17,19 @@ package nl.altindag.ssl.sslparameters;
 
 import javax.net.ssl.SSLParameters;
 import java.security.AlgorithmConstraints;
+import java.util.function.Consumer;
 
 public class DelegatingSSLParameters extends SSLParameters {
 
     SSLParameters sslParameters;
+    Consumer<SSLParameters> sslParametersEnhancer;
 
-    public DelegatingSSLParameters(SSLParameters sslParameters) {
+    public DelegatingSSLParameters(SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
         this.sslParameters = sslParameters;
+        this.sslParametersEnhancer = sslParametersEnhancer;
+        // The library is compatible with Java 8 and therefor lacks the support for newer methods which have been introduced in later Java versions.
+        // The SSLParametersEnhancer gives the possibility to enhance it with newer methods for the end-user while keeping the compatibility with Java 8.
+        sslParametersEnhancer.accept(this);
     }
 
     public SSLParameters getInnerSslParameters() {
@@ -92,6 +98,7 @@ public class DelegatingSSLParameters extends SSLParameters {
 
     public void setSslParameters(SSLParameters sslParameters) {
         this.sslParameters = sslParameters;
+        sslParametersEnhancer.accept(this);
     }
 
 }

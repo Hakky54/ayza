@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * @author Hakan Altindag
@@ -32,6 +33,10 @@ public final class SSLParametersUtils {
     }
 
     public static SSLParameters copy(SSLParameters source) {
+        return copy(source, sslParameters -> {});
+    }
+
+    public static SSLParameters copy(SSLParameters source, Consumer<SSLParameters> sslParametersEnhancer) {
         if (source instanceof HotSwappableSSLParameters) {
             HotSwappableSSLParameters swappableSslParameters = (HotSwappableSSLParameters) source;
             SSLParameters innerSslParameters = swappableSslParameters.getInnerSslParameters();
@@ -50,6 +55,9 @@ public final class SSLParametersUtils {
         if (source.getNeedClientAuth()) {
             target.setNeedClientAuth(true);
         }
+
+        sslParametersEnhancer.accept(target);
+
         return target;
     }
 
@@ -100,6 +108,8 @@ public final class SSLParametersUtils {
             target.setNeedClientAuth(true);
         }
 
+        target.setUseCipherSuitesOrder(baseSslParameters.getUseCipherSuitesOrder());
+
         return target;
     }
 
@@ -111,7 +121,18 @@ public final class SSLParametersUtils {
      * @return Swappable SSLParameters
      */
     public static SSLParameters createSwappableSslParameters(SSLParameters sslParameters) {
-        return new HotSwappableSSLParameters(sslParameters);
+        return createSwappableSslParameters(sslParameters, sp -> {});
+    }
+
+    /**
+     * Wraps the given SSLParameters into an instance of a Hot Swappable SSLParameters.
+     * This type of SSLParameters has the capability of swapping in and out different SSLParameters at runtime.
+     *
+     * @param sslParameters To be wrapped SSLParameters
+     * @return Swappable SSLParameters
+     */
+    public static SSLParameters createSwappableSslParameters(SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        return new HotSwappableSSLParameters(sslParameters, sslParametersEnhancer);
     }
 
 }

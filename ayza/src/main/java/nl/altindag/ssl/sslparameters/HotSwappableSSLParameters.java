@@ -20,6 +20,7 @@ import java.security.AlgorithmConstraints;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static nl.altindag.laleler.ValidationUtils.GENERIC_EXCEPTION_MESSAGE;
@@ -31,8 +32,12 @@ public final class HotSwappableSSLParameters extends DelegatingSSLParameters {
     private final Lock readLock = readWriteLock.readLock();
     private final Lock writeLock = readWriteLock.writeLock();
 
+    public HotSwappableSSLParameters(SSLParameters sslParameters, Consumer<SSLParameters> sslParametersEnhancer) {
+        super(sslParameters, sslParametersEnhancer);
+    }
+
     public HotSwappableSSLParameters(SSLParameters sslParameters) {
-        super(sslParameters);
+        this(sslParameters, sp -> {});
     }
 
     @Override
