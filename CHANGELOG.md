@@ -3,6 +3,9 @@
 This list is not intended to be all-encompassing - it will document major and breaking API
 changes with their rationale when appropriate:
 
+### v10.1.0
+ - Added enhanceable SSLParameters option to SSLFactory
+ - Bumped dependencies
 ### v10.0.7
  - Bumped dependencies
 ### v10.0.6
