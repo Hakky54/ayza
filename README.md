@@ -66,6 +66,7 @@ libraryDependencies += "io.github.hakky54" % "ayza" % "10.0.7"
      - [Loading JDK and OS trusted certificates](#loading-jdk-and-os-trusted-certificates)
      - [Using specific protocols and ciphers with custom secure-random and hostname-verifier](#using-specific-protocols-ciphers-with-custom-secure-random-and-hostname-verifier)
      - [Enhanceable hostname verifier](#enhanceable-hostname-verifier)
+     - [Providing ssl options](#providing-ssl-options)
      - [Using multiple identity materials and trust materials](#support-for-using-multiple-identity-materials-and-trust-materials)
      - [Using custom KeyManager and TrustManager](#support-for-using-x509extendedkeymanager-and-x509extendedtrustmanager)
      - [Using dummy identity and trust material](#using-dummy-identity-and-trust-material)
@@ -373,6 +374,21 @@ SSLFactory sslFactory = SSLFactory.builder()
           .withDefaultTrustMaterial()
           .withHostnameVerifierEnhancer(parameters -> "localhost".equals(parameters.getHostname()))
           .build();
+```
+
+### Providing ssl options
+```text
+SSLFactory sslFactory = SSLFactory.builder()
+        .withIdentityMaterial("identity.jks", "password".toCharArray())
+        .withTrustMaterial("truststore.jks", "password".toCharArray())
+        .withCiphers("TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384", "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256")
+        .withNeedClientAuthentication()
+        .withSslParametersEnhancer(sslParameters -> {
+            sslParameters.setUseCipherSuitesOrder(true);
+            sslParameters.setSignatureSchemes(new String[]{"rsa_pss_rsae_sha256", "rsa_pkcs1_sha256"});
+            sslParameters.setNamedGroups(new String[]{"secp256r1", "secp384r1"});
+        })
+        .build();
 ```
 
 ##### Support for using multiple identity materials and trust materials
