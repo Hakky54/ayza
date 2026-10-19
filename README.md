@@ -8,7 +8,8 @@
 [![Android API Compatibility](https://img.shields.io/badge/Android_API_Compatibility-24+-blue.svg)](#)
 [![Apache2 license](https://img.shields.io/badge/license-Aache2.0-blue.svg)](https://github.com/Hakky54/ayza/blob/master/LICENSE)
 [![Maven Central](https://maven-badges.sml.io/sonatype-central/io.github.hakky54/ayza/badge.svg?style=flat&subject=Sonatype%20Central&color=blue)](https://central.sonatype.com/artifact/io.github.hakky54/ayza)
-[![Dependencies: none](https://img.shields.io/badge/dependencies-1-blue.svg)](#)
+[![Commercial users](https://api.scarf.sh/v2/packages/Hakky54/1d908139-529f-489e-a261-6e1be46e33a7/commercial-users-badge)](https://api.scarf.sh/v2/packages/Hakky54/1d908139-529f-489e-a261-6e1be46e33a7/commercial-users-badge)
+[![Downloads](https://api.scarf.sh/v2/packages/Hakky54/1d908139-529f-489e-a261-6e1be46e33a7/downloads-badge)](https://api.scarf.sh/v2/packages/Hakky54/1d908139-529f-489e-a261-6e1be46e33a7/downloads-badge)
 [![GitHub stars chart](https://img.shields.io/badge/github%20stars-chart-blue.svg)](https://seladb.github.io/StarTrack-js/#/preload?r=hakky54,ayza)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FHakky54%2Fayza.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FHakky54%2Fayza?ref=badge_shield)
 
