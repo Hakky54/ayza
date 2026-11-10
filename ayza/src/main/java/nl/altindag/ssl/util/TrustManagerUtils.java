@@ -16,6 +16,7 @@
 package nl.altindag.ssl.util;
 
 import nl.altindag.desidero.OperatingSystem;
+import nl.altindag.desidero.WindowsCertificateUtils;
 import nl.altindag.laleler.CollectorsUtils;
 import nl.altindag.ssl.exception.GenericTrustManagerException;
 import nl.altindag.ssl.model.TrustManagerParameters;
@@ -101,9 +102,22 @@ public final class TrustManagerUtils {
         }
 
         X509ExtendedTrustManager trustManager = createTrustManager(trustStores.toArray(new KeyStore[]{}));
-        return Optional.of(new SystemX509ExtendedTrustManager(trustManager, OperatingSystem.get().name().toLowerCase()));
-    }
+        OperatingSystem operatingSystem = OperatingSystem.get();
 
+        if (operatingSystem == OperatingSystem.WINDOWS) {
+            WindowsCertificateUtils windows = WindowsCertificateUtils.getInstance();
+            List<X509Certificate> intermediates = windows.getIntermediateCertificates();
+
+            if (!intermediates.isEmpty()) {
+                List<X509Certificate> trustedCertificates = new ArrayList<>();
+                trustedCertificates.addAll(windows.getRootCertificates());
+                trustedCertificates.addAll(windows.getMyCertificates());
+
+                trustManager = createTrustManager(trustedCertificates, intermediates);
+            }
+        }
+        return Optional.of(new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()));
+    }
 
     public static X509ExtendedTrustManager createTrustManager(List<X509Certificate> certificates) {
         KeyStore trustStore = KeyStoreUtils.createTrustStore(certificates);
