@@ -35,6 +35,7 @@ import nl.altindag.ssl.trustmanager.X509TrustManagerWrapper;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
+import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -47,6 +48,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Provider;
+import java.security.cert.CertStore;
+import java.security.cert.CollectionCertStoreParameters;
+import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +61,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -191,6 +198,34 @@ public final class TrustManagerUtils {
             trustManagerFactory.init(managerFactoryParameters);
             return TrustManagerUtils.getTrustManager(trustManagerFactory);
         } catch (InvalidAlgorithmParameterException e) {
+            throw new GenericTrustManagerException(e);
+        }
+    }
+
+    /**
+     * Creates a PKIX trust manager using the supplied root certificates as trust anchors and the
+     * intermediate certificates as certificates available for certificate-chain building.
+     * Intermediate certificates are not trusted by themselves; a validated chain must terminate
+     * at one of the supplied root certificates. This is useful for trusting certificates issued
+     * by a private or otherwise custom certificate authority.
+     *
+     * @param rootCertificates certificates to trust as the roots of valid certificate chains
+     * @param intermediateCertificates certificates that may be used to build chains to the roots
+     * @return a trust manager that validates certificate chains against the supplied roots
+     * @throws GenericTrustManagerException if the PKIX trust manager cannot be created
+     */
+    public static X509ExtendedTrustManager createTrustManager(List<X509Certificate> rootCertificates, List<X509Certificate> intermediateCertificates) {
+        Set<TrustAnchor> trustAnchors = rootCertificates.stream()
+                .map(certificate -> new TrustAnchor(certificate, null))
+                .collect(Collectors.toSet());
+
+        try {
+            PKIXBuilderParameters parameters = new PKIXBuilderParameters(trustAnchors, new X509CertSelector());
+            CertStore intermediateStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(intermediateCertificates));
+            parameters.addCertStore(intermediateStore);
+
+            return TrustManagerUtils.createTrustManager(new CertPathTrustManagerParameters(parameters), "PKIX");
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException e) {
             throw new GenericTrustManagerException(e);
         }
     }
