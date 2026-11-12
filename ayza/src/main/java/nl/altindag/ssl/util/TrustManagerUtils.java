@@ -18,6 +18,7 @@ package nl.altindag.ssl.util;
 import nl.altindag.desidero.OperatingSystem;
 import nl.altindag.desidero.WindowsCertificateUtils;
 import nl.altindag.laleler.CollectorsUtils;
+import nl.altindag.laleler.function.Box;
 import nl.altindag.ssl.exception.GenericTrustManagerException;
 import nl.altindag.ssl.model.TrustManagerParameters;
 import nl.altindag.ssl.trustmanager.CertificateCapturingX509ExtendedTrustManager;
@@ -97,12 +98,6 @@ public final class TrustManagerUtils {
     }
 
     public static Optional<X509ExtendedTrustManager> createTrustManagerWithSystemTrustedCertificates() {
-        List<KeyStore> trustStores = KeyStoreUtils.loadSystemKeyStores();
-        if (trustStores.isEmpty()) {
-            return Optional.empty();
-        }
-
-        X509ExtendedTrustManager trustManager = createTrustManager(trustStores.toArray(new KeyStore[]{}));
         OperatingSystem operatingSystem = OperatingSystem.get();
 
         if (operatingSystem == WINDOWS) {
@@ -114,10 +109,22 @@ public final class TrustManagerUtils {
                 trustedCertificates.addAll(windows.getRootCertificates());
                 trustedCertificates.addAll(windows.getMyCertificates());
 
-                trustManager = createTrustManager(trustedCertificates, intermediates);
+                return Box.of(createTrustManager(trustedCertificates, intermediates))
+                        .<X509ExtendedTrustManager>map(trustManager -> new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()))
+                        .map(Optional::of)
+                        .get();
             }
         }
-        return Optional.of(new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()));
+
+        List<KeyStore> trustStores = KeyStoreUtils.loadSystemKeyStores();
+        if (trustStores.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Box.of(createTrustManager(trustStores.toArray(new KeyStore[]{})))
+                .<X509ExtendedTrustManager>map(trustManager -> new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()))
+                .map(Optional::of)
+                .get();
     }
 
     public static X509ExtendedTrustManager createTrustManager(List<X509Certificate> certificates) {
