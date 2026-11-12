@@ -16,6 +16,7 @@
 package nl.altindag.ssl.util;
 
 import nl.altindag.desidero.OperatingSystem;
+import nl.altindag.desidero.WindowsCertificateUtils;
 import nl.altindag.laleler.CollectorsUtils;
 import nl.altindag.ssl.exception.GenericTrustManagerException;
 import nl.altindag.ssl.model.TrustManagerParameters;
@@ -35,6 +36,7 @@ import nl.altindag.ssl.trustmanager.X509TrustManagerWrapper;
 import nl.altindag.sude.Logger;
 import nl.altindag.sude.LoggerFactory;
 
+import javax.net.ssl.CertPathTrustManagerParameters;
 import javax.net.ssl.ManagerFactoryParameters;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -47,6 +49,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Provider;
+import java.security.cert.CertStore;
+import java.security.cert.CollectionCertStoreParameters;
+import java.security.cert.PKIXBuilderParameters;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509CertSelector;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,10 +62,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+import static nl.altindag.desidero.OperatingSystem.WINDOWS;
 import static nl.altindag.laleler.CollectorsUtils.toListAndThen;
 import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
 
@@ -88,15 +97,30 @@ public final class TrustManagerUtils {
     }
 
     public static Optional<X509ExtendedTrustManager> createTrustManagerWithSystemTrustedCertificates() {
+        OperatingSystem operatingSystem = OperatingSystem.get();
+
+        if (operatingSystem == WINDOWS) {
+            WindowsCertificateUtils windows = WindowsCertificateUtils.getInstance();
+            List<X509Certificate> intermediates = windows.getIntermediateCertificates();
+
+            if (!intermediates.isEmpty()) {
+                List<X509Certificate> trustedCertificates = new ArrayList<>();
+                trustedCertificates.addAll(windows.getRootCertificates());
+                trustedCertificates.addAll(windows.getMyCertificates());
+
+                return Optional.of(createTrustManager(trustedCertificates, intermediates))
+                        .map(trustManager -> new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()));
+            }
+        }
+
         List<KeyStore> trustStores = KeyStoreUtils.loadSystemKeyStores();
         if (trustStores.isEmpty()) {
             return Optional.empty();
         }
 
-        X509ExtendedTrustManager trustManager = createTrustManager(trustStores.toArray(new KeyStore[]{}));
-        return Optional.of(new SystemX509ExtendedTrustManager(trustManager, OperatingSystem.get().name().toLowerCase()));
+        return Optional.of(createTrustManager(trustStores.toArray(new KeyStore[]{})))
+                .map(trustManager -> new SystemX509ExtendedTrustManager(trustManager, operatingSystem.name().toLowerCase()));
     }
-
 
     public static X509ExtendedTrustManager createTrustManager(List<X509Certificate> certificates) {
         KeyStore trustStore = KeyStoreUtils.createTrustStore(certificates);
@@ -191,6 +215,34 @@ public final class TrustManagerUtils {
             trustManagerFactory.init(managerFactoryParameters);
             return TrustManagerUtils.getTrustManager(trustManagerFactory);
         } catch (InvalidAlgorithmParameterException e) {
+            throw new GenericTrustManagerException(e);
+        }
+    }
+
+    /**
+     * Creates a PKIX trust manager using the supplied root certificates as trust anchors and the
+     * intermediate certificates as certificates available for certificate-chain building.
+     * Intermediate certificates are not trusted by themselves; a validated chain must terminate
+     * at one of the supplied root certificates. This is useful for trusting certificates issued
+     * by a private or otherwise custom certificate authority.
+     *
+     * @param rootCertificates certificates to trust as the roots of valid certificate chains
+     * @param intermediateCertificates certificates that may be used to build chains to the roots
+     * @return a trust manager that validates certificate chains against the supplied roots
+     * @throws GenericTrustManagerException if the PKIX trust manager cannot be created
+     */
+    public static X509ExtendedTrustManager createTrustManager(List<X509Certificate> rootCertificates, List<X509Certificate> intermediateCertificates) {
+        Set<TrustAnchor> trustAnchors = rootCertificates.stream()
+                .map(certificate -> new TrustAnchor(certificate, null))
+                .collect(Collectors.toSet());
+
+        try {
+            PKIXBuilderParameters parameters = new PKIXBuilderParameters(trustAnchors, new X509CertSelector());
+            CertStore intermediateStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(intermediateCertificates));
+            parameters.addCertStore(intermediateStore);
+
+            return TrustManagerUtils.createTrustManager(new CertPathTrustManagerParameters(parameters), "PKIX");
+        } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException e) {
             throw new GenericTrustManagerException(e);
         }
     }

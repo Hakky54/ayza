@@ -356,6 +356,22 @@ SSLFactory.builder()
           .build();
 ```
 
+The above snippet will by default get the JDK and OS trusted certificates for Windows, Linux, MacOs and Android.
+
+If you also want the intermediate certificates from Windows CA Store you need to include the following additional dependencies listed below in your project. The intermediate certificates will be available for certificate-chain building.
+```xml
+<dependency>
+    <groupId>net.java.dev.jna</groupId>
+    <artifactId>jna</artifactId>
+    <version>${version.jna}</version>
+</dependency>
+<dependency>
+    <groupId>net.java.dev.jna</groupId>
+    <artifactId>jna-platform</artifactId>
+    <version>${version.jna}</version>
+</dependency>
+```
+
 ##### Using specific protocols, ciphers with custom secure random and hostname verifier
 If you are using java 11 or newer, than you are also able to use TLSv1.3 as encryption protocol by default.
 ```text
