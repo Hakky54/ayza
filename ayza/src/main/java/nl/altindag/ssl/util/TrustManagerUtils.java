@@ -67,6 +67,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+import static nl.altindag.desidero.OperatingSystem.WINDOWS;
 import static nl.altindag.laleler.CollectorsUtils.toListAndThen;
 import static nl.altindag.laleler.ValidationUtils.requireNotEmpty;
 
@@ -104,7 +105,7 @@ public final class TrustManagerUtils {
         X509ExtendedTrustManager trustManager = createTrustManager(trustStores.toArray(new KeyStore[]{}));
         OperatingSystem operatingSystem = OperatingSystem.get();
 
-        if (operatingSystem == OperatingSystem.WINDOWS) {
+        if (operatingSystem == WINDOWS) {
             WindowsCertificateUtils windows = WindowsCertificateUtils.getInstance();
             List<X509Certificate> intermediates = windows.getIntermediateCertificates();
 
