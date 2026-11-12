@@ -47,6 +47,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.Security;
 import java.security.cert.CertPathBuilder;
+import java.security.cert.CertStore;
 import java.security.cert.CertificateException;
 import java.security.cert.PKIXBuilderParameters;
 import java.security.cert.PKIXRevocationChecker;
@@ -316,6 +317,30 @@ class TrustManagerUtilsShould {
             verify(windows, never()).getTrustStores();
         } finally {
             System.setProperty("os.name", originalOsName);
+        }
+    }
+
+    @Test
+    void throwGenericTrustManagerExceptionAsExceptionWhenGettingInvalidAlgorithmParameterExceptionWhileCreatingTrustManagerFromIntermediateCertificates() {
+        KeyStore rootStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + TRUSTSTORE_FILE_NAME, TRUSTSTORE_PASSWORD);
+        KeyStore myStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + "truststore-containing-github.jks", TRUSTSTORE_PASSWORD);
+
+        X509Certificate root = TrustManagerUtils.createTrustManager(rootStore).getAcceptedIssuers()[0];
+        X509Certificate my = TrustManagerUtils.createTrustManager(myStore).getAcceptedIssuers()[0];
+
+        X509Certificate intermediate = mock(X509Certificate.class);
+
+        try (MockedStatic<CertStore> certStore = mockStatic(CertStore.class, invocation -> {
+            Method method = invocation.getMethod();
+            if ("getInstance".equals(method.getName()) && method.getParameterCount() == 2) {
+                throw new InvalidAlgorithmParameterException("KABOOM!");
+            } else {
+                return invocation.callRealMethod();
+            }
+        })) {
+            assertThatThrownBy(() -> TrustManagerUtils.createTrustManager(Arrays.asList(root, my), Collections.singletonList(intermediate)))
+                    .isInstanceOf(GenericTrustManagerException.class)
+                    .hasMessageContaining("KABOOM!");
         }
     }
 
