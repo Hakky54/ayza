@@ -15,6 +15,7 @@
  */
 package nl.altindag.ssl.util;
 
+import nl.altindag.desidero.WindowsCertificateUtils;
 import nl.altindag.log.LogCaptor;
 import nl.altindag.ssl.exception.GenericSecurityException;
 import nl.altindag.ssl.exception.GenericTrustManagerException;
@@ -213,6 +214,107 @@ class TrustManagerUtilsShould {
                 assertThat(trustManager.get()).isInstanceOf(SystemX509ExtendedTrustManager.class);
                 assertThat((trustManager).get().getAcceptedIssuers()).hasSizeGreaterThan(0);
             }
+        }
+    }
+
+    @Test
+    void createSystemTrustManagerWithWindowsIntermediateCertificates() {
+        KeyStore rootStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + TRUSTSTORE_FILE_NAME, TRUSTSTORE_PASSWORD);
+        KeyStore myStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + "truststore-containing-github.jks", TRUSTSTORE_PASSWORD);
+
+        X509Certificate root = TrustManagerUtils.createTrustManager(rootStore).getAcceptedIssuers()[0];
+        X509Certificate my = TrustManagerUtils.createTrustManager(myStore).getAcceptedIssuers()[0];
+
+        X509Certificate intermediate = mock(X509Certificate.class);
+        WindowsCertificateUtils windows = mock(WindowsCertificateUtils.class);
+
+        when(windows.getRootCertificates()).thenReturn(Collections.singletonList(root));
+        when(windows.getMyCertificates()).thenReturn(Collections.singletonList(my));
+        when(windows.getIntermediateCertificates()).thenReturn(Collections.singletonList(intermediate));
+
+        String originalOsName = System.getProperty("os.name");
+
+        try (MockedStatic<KeyStoreUtils> keyStores = mockStatic(KeyStoreUtils.class); MockedStatic<WindowsCertificateUtils> windowsUtils = mockStatic(WindowsCertificateUtils.class)) {
+
+            System.setProperty("os.name", "Windows 11");
+
+            keyStores.when(KeyStoreUtils::loadSystemKeyStores).thenReturn(Arrays.asList(rootStore, myStore));
+
+            windowsUtils.when(WindowsCertificateUtils::getInstance).thenReturn(windows);
+
+            Optional<X509ExtendedTrustManager> result = TrustManagerUtils.createTrustManagerWithSystemTrustedCertificates();
+
+            assertThat(result).isPresent();
+            assertThat(result.get()).isInstanceOf(SystemX509ExtendedTrustManager.class);
+
+            assertThat(Arrays.asList(result.get().getAcceptedIssuers())).contains(root, my);
+
+            verify(windows).getIntermediateCertificates();
+            verify(windows).getRootCertificates();
+            verify(windows).getMyCertificates();
+
+        } finally {
+            System.setProperty("os.name", originalOsName);
+        }
+    }
+
+    @Test
+    void createSystemTrustManagerWithoutWindowsIntermediateCertificates() {
+        KeyStore trustStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + TRUSTSTORE_FILE_NAME, TRUSTSTORE_PASSWORD);
+        X509Certificate trustedCertificate = TrustManagerUtils.createTrustManager(trustStore).getAcceptedIssuers()[0];
+
+        WindowsCertificateUtils windows = mock(WindowsCertificateUtils.class);
+        when(windows.getIntermediateCertificates()).thenReturn(Collections.emptyList());
+
+        String originalOsName = System.getProperty("os.name");
+
+        try (MockedStatic<KeyStoreUtils> keyStores = mockStatic(KeyStoreUtils.class); MockedStatic<WindowsCertificateUtils> windowsUtils = mockStatic(WindowsCertificateUtils.class)) {
+            System.setProperty("os.name", "Windows 11");
+
+            keyStores.when(KeyStoreUtils::loadSystemKeyStores).thenReturn(Collections.singletonList(trustStore));
+            windowsUtils.when(WindowsCertificateUtils::getInstance).thenReturn(windows);
+
+            Optional<X509ExtendedTrustManager> result = TrustManagerUtils.createTrustManagerWithSystemTrustedCertificates();
+
+            assertThat(result).isPresent();
+            assertThat(result.get()).isInstanceOf(SystemX509ExtendedTrustManager.class);
+            assertThat(result.get().getAcceptedIssuers()).contains(trustedCertificate);
+
+            verify(windows).getIntermediateCertificates();
+            verify(windows, org.mockito.Mockito.never()).getRootCertificates();
+            verify(windows, org.mockito.Mockito.never()).getMyCertificates();
+
+        } finally {
+            System.setProperty("os.name", originalOsName);
+        }
+    }
+
+    @Test
+    void createSystemTrustManagerOnLinuxWithoutCallingWindowsCertificateUtils() {
+        KeyStore trustStore = KeyStoreUtils.loadKeyStore(KEYSTORE_LOCATION + TRUSTSTORE_FILE_NAME, TRUSTSTORE_PASSWORD);
+        X509Certificate trustedCertificate = TrustManagerUtils.createTrustManager(trustStore).getAcceptedIssuers()[0];
+
+        String originalOsName = System.getProperty("os.name");
+	WindowsCertificateUtils windows = mock(WindowsCertificateUtils.class);
+
+        try (MockedStatic<KeyStoreUtils> keyStores = mockStatic(KeyStoreUtils.class); MockedStatic<WindowsCertificateUtils> windowsUtils = mockStatic(WindowsCertificateUtils.class)) {
+            System.setProperty("os.name", "Linux");
+	    windowsUtils.when(WindowsCertificateUtils::getInstance).thenReturn(windows);
+
+            keyStores.when(KeyStoreUtils::loadSystemKeyStores).thenReturn(Collections.singletonList(trustStore));
+
+            Optional<X509ExtendedTrustManager> result = TrustManagerUtils.createTrustManagerWithSystemTrustedCertificates();
+
+            assertThat(result).isPresent();
+            assertThat(result.get()).isInstanceOf(SystemX509ExtendedTrustManager.class);
+            assertThat(result.get().getAcceptedIssuers()).contains(trustedCertificate);
+
+	    verify(windows, org.mockito.Mockito.never()).getRootCertificates();
+	    verify(windows, org.mockito.Mockito.never()).getMyCertificates();
+	    verify(windows, org.mockito.Mockito.never()).getIntermediateCertificates();
+
+        } finally {
+            System.setProperty("os.name", originalOsName);
         }
     }
 
