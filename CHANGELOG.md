@@ -3,6 +3,9 @@
 This list is not intended to be all-encompassing - it will document major and breaking API
 changes with their rationale when appropriate:
 
+### v10.1.2
+ - Resolve bug report for Windows intermediate certificates when JNA is absent, see also: [Ayza issue 798](https://github.com/Hakky54/ayza/discussions/798)
+ - Bumped dependencies
 ### v10.1.1
  - Added method for creating TrustManager from root ca and intermediate ca while using certificate-chain builder
  - Enhanced extracting system trusted certificates for Windows with CA Store. JNA library is needed for this feature to be enabled. JNA is not provided as transitive by Ayza and also not by Desidero
